@@ -1,0 +1,1460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hieroXML>
+<hieroXML name="NukeStudio" version="11" revision="604769" release="12.2v2">
+ <Media>
+  <Source file="D:/VFX_Projects/2024/Drama/PRESTIGE/Footage/Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01.mov" objName="media" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01" duration="47" guid="{f19935bd-2717-1149-b128-5bd77cb90ea1}">
+   <sets>
+    <Set title="Media" domainroot="foundry.source">
+     <values>
+      <WeakObjRefValue name="foundry.source.umid" value="8a99d23e-9f7d-4d9d-caa1-8aeb79220249" default="1"/>
+      <StringValue name="foundry.source.umidOriginator" value="foundry.source.umid" default="1"/>
+      <IntegerValue name="foundry.source.width" value="2048" default="1"/>
+      <IntegerValue name="foundry.source.height" value="1152" default="1"/>
+      <IntegerValue name="foundry.source.duration" value="47" default="1"/>
+      <TimeBaseValue name="foundry.source.framerate" value="25/1" default="1"/>
+      <TimeBaseValue name="foundry.source.samplerate" value="0/0" default="1"/>
+      <IntegerValue name="foundry.source.starttime" value="0" default="1"/>
+      <IntegerValue name="foundry.source.timecode" value="0" default="1"/>
+      <BooleanValue name="foundry.source.timecodedropframe" value="No" default="1"/>
+      <IntegerValue name="foundry.source.bitsperchannel" value="0" default="1"/>
+      <IntegerValue name="foundry.source.fragments" value="1" default="1"/>
+      <StringValue name="foundry.source.path" value="D:/VFX_Projects/2024/Drama/PRESTIGE/Footage/Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01.mov" default="1"/>
+      <StringValue name="foundry.source.shortfilename" value="Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01.mov" default="1"/>
+      <StringValue name="foundry.source.filename" value="Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01.mov" default="1"/>
+      <FloatValue name="foundry.source.pixelAspect" value="1" default="1"/>
+      <IntegerValue name="foundry.source.shoottime" value="4294967295" default="1"/>
+      <StringValue name="foundry.source.reelID" value="" default="1"/>
+      <StringValue name="foundry.source.type" value="QuickTime ProRes4444" default="1"/>
+      <StringValue name="foundry.source.channelformat" value="integer" default="1"/>
+      <StringValue name="foundry.source.layers" value="colour" default="1"/>
+      <IntegerValue name="foundry.source.bitmapsize" value="0" default="1"/>
+      <StringValue name="foundry.source.pixelformat" value="RGBA (Int16)  Open Color IO space: 8" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.input" domainroot="media.input">
+     <values>
+      <StringValue name="media.input.bitsperchannel" value="12-bit fixed" default="1"/>
+      <StringValue name="media.input.ctime" value="2025-01-19 19:11:25" default="1"/>
+      <StringValue name="media.input.filename" value="D:/VFX_Projects/2024/Drama/PRESTIGE/Footage/Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01.mov" default="1"/>
+      <StringValue name="media.input.filereader" value="mov64" default="1"/>
+      <IntegerValue name="media.input.filesize" value="77861688" default="1"/>
+      <IntegerValue name="media.input.frame" value="1" default="1"/>
+      <FloatValue name="media.input.frame_rate" value="25" default="1"/>
+      <IntegerValue name="media.input.height" value="1152" default="1"/>
+      <StringValue name="media.input.mtime" value="2025-01-19 16:25:55" default="1"/>
+      <FloatValue name="media.input.pixel_aspect" value="1" default="1"/>
+      <StringValue name="media.input.timecode" value="00:00:00:00" default="1"/>
+      <IntegerValue name="media.input.width" value="2048" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.quicktime" domainroot="media.quicktime">
+     <values>
+      <StringValue name="media.quicktime.codec_id" value="ap4h" default="1"/>
+      <StringValue name="media.quicktime.codec_name" value="Apple ProRes 4444" default="1"/>
+      <StringValue name="media.quicktime.encoder" value="Apple ProRes 4444" default="1"/>
+      <StringValue name="media.quicktime.nclc_matrix" value="BT709" default="1"/>
+      <StringValue name="media.quicktime.nclc_primaries" value="ITU-R BT.709" default="1"/>
+      <StringValue name="media.quicktime.nclc_transfer_function" value="ITU-R BT.709" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.quicktime.thefoundry" domainroot="media.quicktime.thefoundry">
+     <values>
+      <StringValue name="media.quicktime.thefoundry.Application" value="Nuke" default="1"/>
+      <StringValue name="media.quicktime.thefoundry.ApplicationVersion" value="12.0v2" default="1"/>
+      <StringValue name="media.quicktime.thefoundry.Colorspace" value="Output - Rec.709" default="1"/>
+      <StringValue name="media.quicktime.thefoundry.Writer" value="mov64" default="1"/>
+      <StringValue name="media.quicktime.thefoundry.YCbCrMatrix" value="Rec 709" default="1"/>
+     </values>
+    </Set>
+    <Set title="uk.co.thefoundry" domainroot="uk.co.thefoundry">
+     <values>
+      <StringValue name="uk.co.thefoundry.Application" value="Nuke" default="1"/>
+      <StringValue name="uk.co.thefoundry.ApplicationVersion" value="12.0v2" default="1"/>
+      <StringValue name="uk.co.thefoundry.Colorspace" value="Output - Rec.709" default="1"/>
+      <StringValue name="uk.co.thefoundry.Writer" value="mov64" default="1"/>
+      <StringValue name="uk.co.thefoundry.YCbCrMatrix" value="Rec 709" default="1"/>
+     </values>
+    </Set>
+    <Set title="QuickTime" domainroot="com.apple.quicktime">
+     <values>
+      <StringValue name="com.apple.quicktime.codec" value="ProRes4444" default="1"/>
+     </values>
+    </Set>
+   </sets>
+   <times>
+    <MediaDesc_TimeInfo_MapItem>
+     <MediaDesc objName="k" channelIndex="0" streamIndex="-1" outputChannel="-2">
+      <MediaFlags objName="flags" allone="1"/>
+      <MediaType type="0" objName="type"/>
+     </MediaDesc>
+     <TimeInfo objName="v" basen="25" duration="47" in="0" based="1"/>
+    </MediaDesc_TimeInfo_MapItem>
+   </times>
+   <Layers>
+    <Layer layerName="colour" ch2="b" ch1="g" layerTypeName="colourAlpha" ch0="r" ch3="a"/>
+   </Layers>
+  </Source>
+  <Clip timeOffset="0" displayTimecode="1" objName="media" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01" timecodeStart="0" displayDropFrames="0" useSoftTrims="0" guid="{5b67d82e-46fd-5449-ae16-fd795b6fc8c3}" timeDisplayFormat="0">
+   <videotracks>
+    <VideoTrack name="Video 1" height="40" guid="cf8d19dd-e964-eb47-ae27-567a4fbf1a0d" collapsed="0">
+     <trackItems>
+      <TrackItem link="internal" guid="{5f8cc897-7683-a942-b95e-82b88554a261}"/>
+     </trackItems>
+     <sets>
+      <Set title="Track" domainroot="foundry.track">
+       <values>
+        <BooleanValue name="foundry.track.enabled" value="Yes" default="1"/>
+       </values>
+      </Set>
+     </sets>
+    </VideoTrack>
+   </videotracks>
+   <sets>
+    <Set title="Timeline" domainroot="foundry.timeline">
+     <values>
+      <TimeBaseValue name="foundry.timeline.framerate" value="25/1" default="1"/>
+      <TimeBaseValue name="foundry.timeline.samplerate" value="0/0" default="1"/>
+      <IntegerValue name="foundry.timeline.duration" value="47" default="0"/>
+      <IntegerValue name="foundry.timeline.poster" value="0" default="1"/>
+      <StringValue name="foundry.timeline.posterLayer" value="colour" default="1"/>
+      <MediaFormatValue name="foundry.timeline.outputformat" value="1,[ 0, 0, 2048, 1152],[ 0, 0, 2048, 1152]," default="1"/>
+      <StringValue name="foundry.timeline.colorSpace" value="Output - Rec.709" default="1"/>
+      <StringValue name="foundry.timeline.readParams" value="AAAAAQAAAAAAAAAHAAAAGW1vdjY0X2RlY29kZV92aWRlb19sZXZlbHMAAAAFaW50MzIAAAAAAAAAFm1vdjY0X2ZpcnN0X3RyYWNrX29ubHkAAAAEYm9vbAEAAAASbW92NjRfeWNiY3JfbWF0cml4AAAABWludDMyAAAAAAAAAApjb2xvcnNwYWNlAAAABWludDMyAAAAcwAAAAdkZWNvZGVyAAAABWludDMyAAAAAAAAABdtb3Y2NF9tYXRjaF9tZXRhX2Zvcm1hdAAAAARib29sAQAAAA9tb3Y2NF9ub19wcmVmaXgAAAAEYm9vbAA=" default="1"/>
+     </values>
+    </Set>
+    <Set title="Media" domainroot="foundry.source">
+     <values>
+      <StringValue name="foundry.source.reelID" value="" default="1"/>
+     </values>
+    </Set>
+   </sets>
+   <node><![CDATA[Read {
+ inputs 0
+ file_type mov
+ file D:/VFX_Projects/2024/Drama/PRESTIGE/Footage/Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01.mov
+ format "2048 1152 0 0 2048 1152 1 "
+ last 47
+ origlast 47
+ origset true
+ colorspace "Output - Rec.709"
+ name Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01_1
+}
+]]></node>
+  </Clip>
+  <Source file="D:/VFX_Projects/2024/Drama/PRESTIGE/Footage/Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01.mov" objName="media" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01" duration="57" guid="{0b57c6e2-7fe6-f046-8038-bd6b02ede9d3}">
+   <sets>
+    <Set title="Media" domainroot="foundry.source">
+     <values>
+      <WeakObjRefValue name="foundry.source.umid" value="825ddafa-97b9-4559-c265-822f71e60a8d" default="1"/>
+      <StringValue name="foundry.source.umidOriginator" value="foundry.source.umid" default="1"/>
+      <IntegerValue name="foundry.source.width" value="2048" default="1"/>
+      <IntegerValue name="foundry.source.height" value="1152" default="1"/>
+      <IntegerValue name="foundry.source.duration" value="57" default="1"/>
+      <TimeBaseValue name="foundry.source.framerate" value="25/1" default="1"/>
+      <TimeBaseValue name="foundry.source.samplerate" value="0/0" default="1"/>
+      <IntegerValue name="foundry.source.starttime" value="0" default="1"/>
+      <IntegerValue name="foundry.source.timecode" value="90" default="1"/>
+      <BooleanValue name="foundry.source.timecodedropframe" value="No" default="1"/>
+      <IntegerValue name="foundry.source.bitsperchannel" value="0" default="1"/>
+      <IntegerValue name="foundry.source.fragments" value="1" default="1"/>
+      <StringValue name="foundry.source.path" value="D:/VFX_Projects/2024/Drama/PRESTIGE/Footage/Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01.mov" default="1"/>
+      <StringValue name="foundry.source.shortfilename" value="Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01.mov" default="1"/>
+      <StringValue name="foundry.source.filename" value="Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01.mov" default="1"/>
+      <FloatValue name="foundry.source.pixelAspect" value="1" default="1"/>
+      <IntegerValue name="foundry.source.shoottime" value="4294967295" default="1"/>
+      <StringValue name="foundry.source.reelID" value="" default="1"/>
+      <StringValue name="foundry.source.type" value="QuickTime ProRes4444" default="1"/>
+      <StringValue name="foundry.source.channelformat" value="integer" default="1"/>
+      <StringValue name="foundry.source.layers" value="colour" default="1"/>
+      <IntegerValue name="foundry.source.bitmapsize" value="0" default="1"/>
+      <StringValue name="foundry.source.pixelformat" value="RGBA (Int16)  Open Color IO space: 8" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.input" domainroot="media.input">
+     <values>
+      <StringValue name="media.input.bitsperchannel" value="12-bit fixed" default="1"/>
+      <StringValue name="media.input.ctime" value="2025-01-19 19:11:26" default="1"/>
+      <StringValue name="media.input.filename" value="D:/VFX_Projects/2024/Drama/PRESTIGE/Footage/Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01.mov" default="1"/>
+      <StringValue name="media.input.filereader" value="mov64" default="1"/>
+      <IntegerValue name="media.input.filesize" value="93253236" default="1"/>
+      <IntegerValue name="media.input.frame" value="1" default="1"/>
+      <FloatValue name="media.input.frame_rate" value="25" default="1"/>
+      <IntegerValue name="media.input.height" value="1152" default="1"/>
+      <StringValue name="media.input.mtime" value="2025-01-19 16:25:23" default="1"/>
+      <FloatValue name="media.input.pixel_aspect" value="1" default="1"/>
+      <StringValue name="media.input.timecode" value="00:00:03:15" default="1"/>
+      <IntegerValue name="media.input.width" value="2048" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.quicktime" domainroot="media.quicktime">
+     <values>
+      <StringValue name="media.quicktime.codec_id" value="ap4h" default="1"/>
+      <StringValue name="media.quicktime.codec_name" value="Apple ProRes 4444" default="1"/>
+      <StringValue name="media.quicktime.encoder" value="Apple ProRes 4444" default="1"/>
+      <StringValue name="media.quicktime.nclc_matrix" value="BT709" default="1"/>
+      <StringValue name="media.quicktime.nclc_primaries" value="ITU-R BT.709" default="1"/>
+      <StringValue name="media.quicktime.nclc_transfer_function" value="ITU-R BT.709" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.quicktime.thefoundry" domainroot="media.quicktime.thefoundry">
+     <values>
+      <StringValue name="media.quicktime.thefoundry.Application" value="Nuke" default="1"/>
+      <StringValue name="media.quicktime.thefoundry.ApplicationVersion" value="12.0v2" default="1"/>
+      <StringValue name="media.quicktime.thefoundry.Colorspace" value="Output - Rec.709" default="1"/>
+      <StringValue name="media.quicktime.thefoundry.Writer" value="mov64" default="1"/>
+      <StringValue name="media.quicktime.thefoundry.YCbCrMatrix" value="Rec 709" default="1"/>
+     </values>
+    </Set>
+    <Set title="uk.co.thefoundry" domainroot="uk.co.thefoundry">
+     <values>
+      <StringValue name="uk.co.thefoundry.Application" value="Nuke" default="1"/>
+      <StringValue name="uk.co.thefoundry.ApplicationVersion" value="12.0v2" default="1"/>
+      <StringValue name="uk.co.thefoundry.Colorspace" value="Output - Rec.709" default="1"/>
+      <StringValue name="uk.co.thefoundry.Writer" value="mov64" default="1"/>
+      <StringValue name="uk.co.thefoundry.YCbCrMatrix" value="Rec 709" default="1"/>
+     </values>
+    </Set>
+    <Set title="QuickTime" domainroot="com.apple.quicktime">
+     <values>
+      <StringValue name="com.apple.quicktime.codec" value="ProRes4444" default="1"/>
+     </values>
+    </Set>
+   </sets>
+   <times>
+    <MediaDesc_TimeInfo_MapItem>
+     <MediaDesc objName="k" channelIndex="0" streamIndex="-1" outputChannel="-2">
+      <MediaFlags objName="flags" allone="1"/>
+      <MediaType type="0" objName="type"/>
+     </MediaDesc>
+     <TimeInfo objName="v" basen="25" duration="57" in="0" based="1"/>
+    </MediaDesc_TimeInfo_MapItem>
+   </times>
+   <Layers>
+    <Layer layerName="colour" ch2="b" ch1="g" layerTypeName="colourAlpha" ch0="r" ch3="a"/>
+   </Layers>
+  </Source>
+  <Clip timeOffset="0" displayTimecode="1" objName="media" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01" timecodeStart="90" displayDropFrames="0" useSoftTrims="0" guid="{6a71f9e8-2072-ff48-88e7-4029c93545f5}" timeDisplayFormat="0">
+   <videotracks>
+    <VideoTrack name="Video 1" height="40" guid="2ad1d6d0-82ab-3941-9903-c5b03d9dc0b4" collapsed="0">
+     <trackItems>
+      <TrackItem link="internal" guid="{03952027-8688-314f-b8ec-3ec059087bde}"/>
+     </trackItems>
+     <sets>
+      <Set title="Track" domainroot="foundry.track">
+       <values>
+        <BooleanValue name="foundry.track.enabled" value="Yes" default="1"/>
+       </values>
+      </Set>
+     </sets>
+    </VideoTrack>
+   </videotracks>
+   <sets>
+    <Set title="Timeline" domainroot="foundry.timeline">
+     <values>
+      <TimeBaseValue name="foundry.timeline.framerate" value="25/1" default="1"/>
+      <TimeBaseValue name="foundry.timeline.samplerate" value="0/0" default="1"/>
+      <IntegerValue name="foundry.timeline.duration" value="57" default="0"/>
+      <IntegerValue name="foundry.timeline.poster" value="0" default="1"/>
+      <StringValue name="foundry.timeline.posterLayer" value="colour" default="1"/>
+      <MediaFormatValue name="foundry.timeline.outputformat" value="1,[ 0, 0, 2048, 1152],[ 0, 0, 2048, 1152]," default="1"/>
+      <StringValue name="foundry.timeline.colorSpace" value="Output - Rec.709" default="1"/>
+      <StringValue name="foundry.timeline.readParams" value="AAAAAQAAAAAAAAAHAAAAGW1vdjY0X2RlY29kZV92aWRlb19sZXZlbHMAAAAFaW50MzIAAAAAAAAAFm1vdjY0X2ZpcnN0X3RyYWNrX29ubHkAAAAEYm9vbAEAAAASbW92NjRfeWNiY3JfbWF0cml4AAAABWludDMyAAAAAAAAAApjb2xvcnNwYWNlAAAABWludDMyAAAAcwAAAAdkZWNvZGVyAAAABWludDMyAAAAAAAAABdtb3Y2NF9tYXRjaF9tZXRhX2Zvcm1hdAAAAARib29sAQAAAA9tb3Y2NF9ub19wcmVmaXgAAAAEYm9vbAA=" default="1"/>
+     </values>
+    </Set>
+    <Set title="Media" domainroot="foundry.source">
+     <values>
+      <StringValue name="foundry.source.reelID" value="" default="1"/>
+     </values>
+    </Set>
+   </sets>
+   <node><![CDATA[Read {
+ inputs 0
+ file_type mov
+ file D:/VFX_Projects/2024/Drama/PRESTIGE/Footage/Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01.mov
+ format "2048 1152 0 0 2048 1152 1 "
+ last 57
+ origlast 57
+ origset true
+ colorspace "Output - Rec.709"
+ name Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01_1
+}
+]]></node>
+  </Clip>
+  <Source file="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02.nk" objName="media" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02" duration="47" guid="{800c9e26-4cfa-474c-827c-34c865cd7c42}">
+   <sets>
+    <Set title="Media" domainroot="foundry.source">
+     <values>
+      <WeakObjRefValue name="foundry.source.umid" value="39806127-2c64-4e84-79b8-39f2ca3bb150" default="1"/>
+      <StringValue name="foundry.source.umidOriginator" value="foundry.source.umid" default="1"/>
+      <IntegerValue name="foundry.source.width" value="2048" default="1"/>
+      <IntegerValue name="foundry.source.height" value="1152" default="1"/>
+      <IntegerValue name="foundry.source.duration" value="47" default="1"/>
+      <TimeBaseValue name="foundry.source.framerate" value="25/1" default="1"/>
+      <TimeBaseValue name="foundry.source.samplerate" value="0/0" default="1"/>
+      <IntegerValue name="foundry.source.starttime" value="1" default="1"/>
+      <IntegerValue name="foundry.source.timecode" value="0" default="1"/>
+      <IntegerValue name="foundry.source.bitsperchannel" value="0" default="1"/>
+      <IntegerValue name="foundry.source.fragments" value="1" default="1"/>
+      <StringValue name="foundry.source.path" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02.nk" default="1"/>
+      <StringValue name="foundry.source.shortfilename" value="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02.nk" default="1"/>
+      <StringValue name="foundry.source.filename" value="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02.nk" default="1"/>
+      <FloatValue name="foundry.source.pixelAspect" value="1" default="1"/>
+      <StringValue name="foundry.source.channelformat" value="integer" default="1"/>
+      <StringValue name="foundry.source.layers" value="colour" default="1"/>
+      <StringValue name="foundry.source.views" value="main" default="1"/>
+      <BooleanValue name="foundry.source.hasDefaultView" value="Yes" default="1"/>
+      <IntegerValue name="foundry.source.bitmapsize" value="0" default="1"/>
+      <StringValue name="foundry.source.pixelformat" value="RGBA (Int8)  Open Color IO space: 6" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.input" domainroot="media.input">
+     <values>
+      <StringValue name="media.input.bitsperchannel" value="8-bit fixed" default="1"/>
+      <StringValue name="media.input.ctime" value="2025-03-24 04:50:24" default="1"/>
+      <StringValue name="media.input.filename" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02.nk" default="1"/>
+      <StringValue name="media.input.filereader" value="nk" default="1"/>
+      <IntegerValue name="media.input.filesize" value="35023" default="1"/>
+      <IntegerValue name="media.input.frame" value="1" default="1"/>
+      <FloatValue name="media.input.frame_rate" value="25" default="1"/>
+      <IntegerValue name="media.input.height" value="1152" default="1"/>
+      <StringValue name="media.input.mtime" value="2025-03-24 04:50:24" default="1"/>
+      <FloatValue name="media.input.pixel_aspect" value="1" default="1"/>
+      <StringValue name="media.input.timecode" value="00:00:00:00" default="1"/>
+      <StringValue name="media.input.view_names" value="main" default="1"/>
+      <IntegerValue name="media.input.width" value="2048" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.nk" domainroot="media.nk">
+     <values>
+      <IntegerValue name="media.nk.firstframe" value="1" default="1"/>
+      <IntegerValue name="media.nk.lastframe" value="47" default="1"/>
+      <StringValue name="media.nk.unexpandedwritepath" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02.%04d.jpg" default="1"/>
+      <StringValue name="media.nk.writepath" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02.%04d.jpg" default="1"/>
+     </values>
+    </Set>
+   </sets>
+   <times>
+    <MediaDesc_TimeInfo_MapItem>
+     <MediaDesc objName="k" channelIndex="0" streamIndex="-1" outputChannel="-2">
+      <MediaFlags objName="flags" allone="1"/>
+      <MediaType type="0" objName="type"/>
+     </MediaDesc>
+     <TimeInfo objName="v" basen="25" duration="47" in="1" based="1"/>
+    </MediaDesc_TimeInfo_MapItem>
+   </times>
+   <Layers>
+    <Layer layerName="colour" ch2="b" ch1="g" layerTypeName="colour" ch0="r" ch3=""/>
+   </Layers>
+  </Source>
+  <Clip timeOffset="1" displayTimecode="1" objName="media" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02" timecodeStart="0" displayDropFrames="0" useSoftTrims="0" guid="{10e7bc63-bc1e-8445-b0b8-094f9a215db2}" timeDisplayFormat="0">
+   <videotracks>
+    <VideoTrack name="Video 1" height="40" guid="3397c6ec-76e4-8841-9bae-0bbb06bbaabc" collapsed="0">
+     <trackItems>
+      <TrackItem link="internal" guid="{a0fb5eaf-9d02-1543-8d18-575af8a40dac}"/>
+     </trackItems>
+     <sets>
+      <Set title="Track" domainroot="foundry.track">
+       <values>
+        <BooleanValue name="foundry.track.enabled" value="Yes" default="1"/>
+       </values>
+      </Set>
+     </sets>
+    </VideoTrack>
+   </videotracks>
+   <sets>
+    <Set title="Timeline" domainroot="foundry.timeline">
+     <values>
+      <TimeBaseValue name="foundry.timeline.framerate" value="25/1" default="1"/>
+      <TimeBaseValue name="foundry.timeline.samplerate" value="0/0" default="1"/>
+      <IntegerValue name="foundry.timeline.duration" value="47" default="0"/>
+      <IntegerValue name="foundry.timeline.poster" value="0" default="1"/>
+      <StringValue name="foundry.timeline.posterLayer" value="colour" default="1"/>
+      <MediaFormatValue name="foundry.timeline.outputformat" value="1,[ 0, 0, 2048, 1152],[ 0, 0, 2048, 1152]," default="1"/>
+      <StringValue name="foundry.timeline.colorSpace" value="color_picking" default="1"/>
+      <StringValue name="foundry.timeline.readParams" value="AAAAAQAAAAAAAAABAAAACmNvbG9yc3BhY2UAAAAFaW50MzIAAAAB" default="1"/>
+     </values>
+    </Set>
+    <Set title="Media" domainroot="foundry.source">
+     <values>
+      <StringValue name="foundry.source.reelID" value="" default="1"/>
+     </values>
+    </Set>
+   </sets>
+   <node><![CDATA[Read {
+ inputs 0
+ file_type nk
+ file D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02.nk
+ last 47
+ origlast 47
+ origset true
+ version 9
+ colorspace color_picking
+ name Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02_1
+}
+]]></node>
+  </Clip>
+  <Source file="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02.nk" objName="media" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02" duration="57" guid="{6c636fea-d646-574a-9156-96626a169dae}">
+   <sets>
+    <Set title="Media" domainroot="foundry.source">
+     <values>
+      <WeakObjRefValue name="foundry.source.umid" value="f54cadeb-e0a8-4248-b574-f53e06f77d9c" default="1"/>
+      <StringValue name="foundry.source.umidOriginator" value="foundry.source.umid" default="1"/>
+      <IntegerValue name="foundry.source.width" value="2048" default="1"/>
+      <IntegerValue name="foundry.source.height" value="1152" default="1"/>
+      <IntegerValue name="foundry.source.duration" value="57" default="1"/>
+      <TimeBaseValue name="foundry.source.framerate" value="25/1" default="1"/>
+      <TimeBaseValue name="foundry.source.samplerate" value="0/0" default="1"/>
+      <IntegerValue name="foundry.source.starttime" value="1" default="1"/>
+      <IntegerValue name="foundry.source.timecode" value="90" default="1"/>
+      <IntegerValue name="foundry.source.bitsperchannel" value="0" default="1"/>
+      <IntegerValue name="foundry.source.fragments" value="1" default="1"/>
+      <StringValue name="foundry.source.path" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02.nk" default="1"/>
+      <StringValue name="foundry.source.shortfilename" value="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02.nk" default="1"/>
+      <StringValue name="foundry.source.filename" value="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02.nk" default="1"/>
+      <FloatValue name="foundry.source.pixelAspect" value="1" default="1"/>
+      <StringValue name="foundry.source.channelformat" value="integer" default="1"/>
+      <StringValue name="foundry.source.layers" value="colour" default="1"/>
+      <StringValue name="foundry.source.views" value="main" default="1"/>
+      <BooleanValue name="foundry.source.hasDefaultView" value="Yes" default="1"/>
+      <IntegerValue name="foundry.source.bitmapsize" value="0" default="1"/>
+      <StringValue name="foundry.source.pixelformat" value="RGBA (Int8)  Open Color IO space: 6" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.input" domainroot="media.input">
+     <values>
+      <StringValue name="media.input.bitsperchannel" value="8-bit fixed" default="1"/>
+      <StringValue name="media.input.ctime" value="2025-04-13 16:17:19" default="1"/>
+      <StringValue name="media.input.filename" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02.nk" default="1"/>
+      <StringValue name="media.input.filereader" value="nk" default="1"/>
+      <IntegerValue name="media.input.filesize" value="162736" default="1"/>
+      <IntegerValue name="media.input.frame" value="1" default="1"/>
+      <FloatValue name="media.input.frame_rate" value="25" default="1"/>
+      <IntegerValue name="media.input.height" value="1152" default="1"/>
+      <StringValue name="media.input.mtime" value="2025-04-13 16:17:19" default="1"/>
+      <FloatValue name="media.input.pixel_aspect" value="1" default="1"/>
+      <StringValue name="media.input.timecode" value="00:00:03:15" default="1"/>
+      <StringValue name="media.input.view_names" value="main" default="1"/>
+      <IntegerValue name="media.input.width" value="2048" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.nk" domainroot="media.nk">
+     <values>
+      <IntegerValue name="media.nk.firstframe" value="1" default="1"/>
+      <IntegerValue name="media.nk.lastframe" value="57" default="1"/>
+      <StringValue name="media.nk.unexpandedwritepath" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02.%04d.jpg" default="1"/>
+      <StringValue name="media.nk.writepath" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02.%04d.jpg" default="1"/>
+     </values>
+    </Set>
+   </sets>
+   <times>
+    <MediaDesc_TimeInfo_MapItem>
+     <MediaDesc objName="k" channelIndex="0" streamIndex="-1" outputChannel="-2">
+      <MediaFlags objName="flags" allone="1"/>
+      <MediaType type="0" objName="type"/>
+     </MediaDesc>
+     <TimeInfo objName="v" basen="25" duration="57" in="1" based="1"/>
+    </MediaDesc_TimeInfo_MapItem>
+   </times>
+   <Layers>
+    <Layer layerName="colour" ch2="b" ch1="g" layerTypeName="colour" ch0="r" ch3=""/>
+   </Layers>
+  </Source>
+  <Clip timeOffset="1" displayTimecode="1" objName="media" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02" timecodeStart="90" displayDropFrames="0" useSoftTrims="0" guid="{a0c0f786-f4f8-fe44-871a-3ea2621c2706}" timeDisplayFormat="0">
+   <videotracks>
+    <VideoTrack name="Video 1" height="40" guid="c68ce711-ed51-7648-81f0-5e814db81a78" collapsed="0">
+     <trackItems>
+      <TrackItem link="internal" guid="{28072d74-9396-4d42-a27b-5414d6898b37}"/>
+     </trackItems>
+     <sets>
+      <Set title="Track" domainroot="foundry.track">
+       <values>
+        <BooleanValue name="foundry.track.enabled" value="Yes" default="1"/>
+       </values>
+      </Set>
+     </sets>
+    </VideoTrack>
+   </videotracks>
+   <sets>
+    <Set title="Timeline" domainroot="foundry.timeline">
+     <values>
+      <TimeBaseValue name="foundry.timeline.framerate" value="25/1" default="1"/>
+      <TimeBaseValue name="foundry.timeline.samplerate" value="0/0" default="1"/>
+      <IntegerValue name="foundry.timeline.duration" value="57" default="0"/>
+      <IntegerValue name="foundry.timeline.poster" value="0" default="1"/>
+      <StringValue name="foundry.timeline.posterLayer" value="colour" default="1"/>
+      <MediaFormatValue name="foundry.timeline.outputformat" value="1,[ 0, 0, 2048, 1152],[ 0, 0, 2048, 1152]," default="1"/>
+      <StringValue name="foundry.timeline.colorSpace" value="matte_paint" default="1"/>
+      <StringValue name="foundry.timeline.readParams" value="AAAAAQAAAAAAAAABAAAACmNvbG9yc3BhY2UAAAAFaW50MzIAAAAA" default="1"/>
+     </values>
+    </Set>
+    <Set title="Media" domainroot="foundry.source">
+     <values>
+      <StringValue name="foundry.source.reelID" value="" default="1"/>
+     </values>
+    </Set>
+   </sets>
+   <node><![CDATA[Read {
+ inputs 0
+ file_type nk
+ file D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02.nk
+ last 57
+ origlast 57
+ origset true
+ version 4
+ name Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02_1
+}
+]]></node>
+  </Clip>
+  <Source file="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.nk" objName="media" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01" duration="47" guid="{e530522d-1db8-fd47-9cb8-f0d4111985db}">
+   <sets>
+    <Set title="Media" domainroot="foundry.source">
+     <values>
+      <WeakObjRefValue name="foundry.source.umid" value="20cc786b-3528-47c8-60f4-20bed377a81c" default="1"/>
+      <StringValue name="foundry.source.umidOriginator" value="foundry.source.umid" default="1"/>
+      <IntegerValue name="foundry.source.width" value="2048" default="1"/>
+      <IntegerValue name="foundry.source.height" value="1152" default="1"/>
+      <IntegerValue name="foundry.source.duration" value="47" default="1"/>
+      <TimeBaseValue name="foundry.source.framerate" value="25/1" default="1"/>
+      <TimeBaseValue name="foundry.source.samplerate" value="0/0" default="1"/>
+      <IntegerValue name="foundry.source.starttime" value="1" default="1"/>
+      <IntegerValue name="foundry.source.timecode" value="0" default="1"/>
+      <IntegerValue name="foundry.source.bitsperchannel" value="0" default="1"/>
+      <IntegerValue name="foundry.source.fragments" value="1" default="1"/>
+      <StringValue name="foundry.source.path" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.nk" default="1"/>
+      <StringValue name="foundry.source.shortfilename" value="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.nk" default="1"/>
+      <StringValue name="foundry.source.filename" value="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.nk" default="1"/>
+      <FloatValue name="foundry.source.pixelAspect" value="1" default="1"/>
+      <StringValue name="foundry.source.channelformat" value="integer" default="1"/>
+      <StringValue name="foundry.source.layers" value="colour" default="1"/>
+      <StringValue name="foundry.source.views" value="main" default="1"/>
+      <BooleanValue name="foundry.source.hasDefaultView" value="Yes" default="1"/>
+      <IntegerValue name="foundry.source.bitmapsize" value="0" default="1"/>
+      <StringValue name="foundry.source.pixelformat" value="RGBA (Int8)  Open Color IO space: 6" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.input" domainroot="media.input">
+     <values>
+      <StringValue name="media.input.bitsperchannel" value="8-bit fixed" default="1"/>
+      <StringValue name="media.input.ctime" value="2025-02-02 20:25:20" default="1"/>
+      <StringValue name="media.input.filename" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.nk" default="1"/>
+      <StringValue name="media.input.filereader" value="nk" default="1"/>
+      <IntegerValue name="media.input.filesize" value="12922" default="1"/>
+      <IntegerValue name="media.input.frame" value="1" default="1"/>
+      <FloatValue name="media.input.frame_rate" value="25" default="1"/>
+      <IntegerValue name="media.input.height" value="1152" default="1"/>
+      <StringValue name="media.input.mtime" value="2025-02-02 20:25:20" default="1"/>
+      <FloatValue name="media.input.pixel_aspect" value="1" default="1"/>
+      <StringValue name="media.input.timecode" value="00:00:00:00" default="1"/>
+      <StringValue name="media.input.view_names" value="main" default="1"/>
+      <IntegerValue name="media.input.width" value="2048" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.nk" domainroot="media.nk">
+     <values>
+      <IntegerValue name="media.nk.firstframe" value="1" default="1"/>
+      <IntegerValue name="media.nk.lastframe" value="47" default="1"/>
+      <StringValue name="media.nk.unexpandedwritepath" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.%04d.jpg" default="1"/>
+      <StringValue name="media.nk.writepath" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.%04d.jpg" default="1"/>
+     </values>
+    </Set>
+   </sets>
+   <times>
+    <MediaDesc_TimeInfo_MapItem>
+     <MediaDesc objName="k" channelIndex="0" streamIndex="-1" outputChannel="-2">
+      <MediaFlags objName="flags" allone="1"/>
+      <MediaType type="0" objName="type"/>
+     </MediaDesc>
+     <TimeInfo objName="v" basen="25" duration="47" in="1" based="1"/>
+    </MediaDesc_TimeInfo_MapItem>
+   </times>
+   <Layers>
+    <Layer layerName="colour" ch2="b" ch1="g" layerTypeName="colour" ch0="r" ch3=""/>
+   </Layers>
+  </Source>
+  <Source file="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.nk" objName="media" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01" duration="57" guid="{2fdeab30-efe2-5c46-a730-1434efb37937}">
+   <sets>
+    <Set title="Media" domainroot="foundry.source">
+     <values>
+      <WeakObjRefValue name="foundry.source.umid" value="ec00b4a7-f9e4-4b04-ac38-ec721fbb64d0" default="1"/>
+      <StringValue name="foundry.source.umidOriginator" value="foundry.source.umid" default="1"/>
+      <IntegerValue name="foundry.source.width" value="2048" default="1"/>
+      <IntegerValue name="foundry.source.height" value="1152" default="1"/>
+      <IntegerValue name="foundry.source.duration" value="57" default="1"/>
+      <TimeBaseValue name="foundry.source.framerate" value="25/1" default="1"/>
+      <TimeBaseValue name="foundry.source.samplerate" value="0/0" default="1"/>
+      <IntegerValue name="foundry.source.starttime" value="1" default="1"/>
+      <IntegerValue name="foundry.source.timecode" value="90" default="1"/>
+      <IntegerValue name="foundry.source.bitsperchannel" value="0" default="1"/>
+      <IntegerValue name="foundry.source.fragments" value="1" default="1"/>
+      <StringValue name="foundry.source.path" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.nk" default="1"/>
+      <StringValue name="foundry.source.shortfilename" value="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.nk" default="1"/>
+      <StringValue name="foundry.source.filename" value="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.nk" default="1"/>
+      <FloatValue name="foundry.source.pixelAspect" value="1" default="1"/>
+      <StringValue name="foundry.source.channelformat" value="integer" default="1"/>
+      <StringValue name="foundry.source.layers" value="colour" default="1"/>
+      <StringValue name="foundry.source.views" value="main" default="1"/>
+      <BooleanValue name="foundry.source.hasDefaultView" value="Yes" default="1"/>
+      <IntegerValue name="foundry.source.bitmapsize" value="0" default="1"/>
+      <StringValue name="foundry.source.pixelformat" value="RGBA (Int8)  Open Color IO space: 6" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.input" domainroot="media.input">
+     <values>
+      <StringValue name="media.input.bitsperchannel" value="8-bit fixed" default="1"/>
+      <StringValue name="media.input.ctime" value="2025-02-02 19:09:16" default="1"/>
+      <StringValue name="media.input.filename" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.nk" default="1"/>
+      <StringValue name="media.input.filereader" value="nk" default="1"/>
+      <IntegerValue name="media.input.filesize" value="5905" default="1"/>
+      <IntegerValue name="media.input.frame" value="1" default="1"/>
+      <FloatValue name="media.input.frame_rate" value="25" default="1"/>
+      <IntegerValue name="media.input.height" value="1152" default="1"/>
+      <StringValue name="media.input.mtime" value="2025-02-02 19:09:16" default="1"/>
+      <FloatValue name="media.input.pixel_aspect" value="1" default="1"/>
+      <StringValue name="media.input.timecode" value="00:00:03:15" default="1"/>
+      <StringValue name="media.input.view_names" value="main" default="1"/>
+      <IntegerValue name="media.input.width" value="2048" default="1"/>
+     </values>
+    </Set>
+    <Set title="media.nk" domainroot="media.nk">
+     <values>
+      <IntegerValue name="media.nk.firstframe" value="1" default="1"/>
+      <IntegerValue name="media.nk.lastframe" value="57" default="1"/>
+      <StringValue name="media.nk.unexpandedwritepath" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.%04d.jpg" default="1"/>
+      <StringValue name="media.nk.writepath" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.%04d.jpg" default="1"/>
+     </values>
+    </Set>
+   </sets>
+   <times>
+    <MediaDesc_TimeInfo_MapItem>
+     <MediaDesc objName="k" channelIndex="0" streamIndex="-1" outputChannel="-2">
+      <MediaFlags objName="flags" allone="1"/>
+      <MediaType type="0" objName="type"/>
+     </MediaDesc>
+     <TimeInfo objName="v" basen="25" duration="57" in="1" based="1"/>
+    </MediaDesc_TimeInfo_MapItem>
+   </times>
+   <Layers>
+    <Layer layerName="colour" ch2="b" ch1="g" layerTypeName="colour" ch0="r" ch3=""/>
+   </Layers>
+  </Source>
+ </Media>
+ <Project project_directory="" samplerate="48000/1" ocioConfigCustom="0" shotPresetName="Basic Nuke Shot With Annotations" buildTrackName="VFX" name="HieroProjectLite" posterCustomFrame="0" useViewColors="0" timedisplayformat="0" timelineReformatCenter="1" guid="{8a576008-5301-1847-bca8-5a3fab7bf50a}" workingSpace="scene_linear" viewerLut="ACES/Rec.709" sixteenBitLut="texture_paint" floatLut="scene_linear" starttimecode="90000" framerate="25/1" customExportRootPath="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts" eightBitLut="matte_paint" exportRootPathMode="CustomDirectory" HeroView="0" ocioconfigpath="C:/Program Files/Nuke12.2v2/plugins/OCIOConfigs/configs/aces_1.2/config.ocio" editable="1" timelineReformatResizeType="Width" nukeUseOCIO="1" redVideoDecodeMode="0" timelineReformatType="Disabled" ocioConfigName="aces_1.2" posterFrameSetting="First" logLut="compositing_log" linkTrackItemVersions="1" thumbnailLut="ACES/Rec.709">
+  <items>
+   <RootBinProjectItem name="Sequences" guid="{982f74b3-02bc-b647-9195-d8e2489efb65}" editable="1">
+    <items>
+     <SequenceProjectItemRoot name="Sequence 1" guid="{ff953331-cdb1-aa4c-a407-9f572ec6e8a0}" MasterVersion="" editable="1">
+      <items>
+       <SequenceProjectItemVersion name="Sequence 1" guid="{6889d735-1965-f442-ade2-8fffaabf9d62}" isHidden="0" editable="1">
+        <Sequence timeOffset="0" displayTimecode="1" objName="sequence" name="Sequence 1" timecodeStart="90000" displayDropFrames="0" useSoftTrims="0" guid="{623143c8-f596-0946-a0fe-21e78daa2bfd}" timeDisplayFormat="0">
+         <videotracks>
+          <VideoTrack name="Video 1" height="40" guid="fc0fa5e0-e41a-104f-a4fc-78c458c08de8" collapsed="0">
+           <trackItems>
+            <TrackItem link="internal" guid="{cf8dcdd0-5c06-ef4d-a338-6950c6ed205f}"/>
+            <TrackItem link="internal" guid="{02f96ed7-9f91-e048-b7e4-8af2bcedf694}"/>
+           </trackItems>
+           <sets>
+            <Set title="Track" domainroot="foundry.track">
+             <values>
+              <BooleanValue name="foundry.track.enabled" value="Yes" default="1"/>
+             </values>
+            </Set>
+           </sets>
+          </VideoTrack>
+          <VideoTrack name="VFX 1" height="40" guid="6921026c-50bc-3445-a15e-ab7ca181aff1" collapsed="0">
+           <trackItems>
+            <TrackItem link="internal" guid="{d2162b36-2d7c-cf48-8c18-b3de1b814090}"/>
+            <TrackItem link="internal" guid="{dd10ad69-bec3-7941-a632-e552151ee6cb}"/>
+           </trackItems>
+           <sets>
+            <Set title="Track" domainroot="foundry.track">
+             <values>
+              <BooleanValue name="foundry.track.enabled" value="Yes" default="1"/>
+             </values>
+            </Set>
+            <Set title="User" domainroot="user">
+             <values>
+              <VectorValue name="user.tags">
+               <values>
+                <TagValue name="user.tags">
+                 <TagInstance icon="icons:NukeVFX.png" objName="value" name="VFX" guid="96af7fcf-1ddf-a148-bb8f-da31bc0bc076" editable="1" visible="1">
+                  <sets>
+                   <Set title="" domainroot="tag">
+                    <values>
+                     <StringValue name="tag.label" value="VFX" default="1"/>
+                     <BooleanValue name="tag.applieswhole" value="Yes" default="1"/>
+                    </values>
+                   </Set>
+                  </sets>
+                 </TagInstance>
+                </TagValue>
+               </values>
+              </VectorValue>
+             </values>
+            </Set>
+           </sets>
+          </VideoTrack>
+          <VideoTrack name="Video 2" height="40" guid="419f5012-1d29-a445-8fbb-ed39e8b94b57" collapsed="0">
+           <sets>
+            <Set title="Track" domainroot="foundry.track">
+             <values>
+              <BooleanValue name="foundry.track.enabled" value="Yes" default="1"/>
+              <BooleanValue name="foundry.track.blendEnabled" value="No" default="1"/>
+             </values>
+            </Set>
+           </sets>
+          </VideoTrack>
+         </videotracks>
+         <audiotracks>
+          <AudioTrack volume="1" name="Audio 1" height="40" guid="38673a20-5540-9449-a33c-915c3f532cc2" collapsed="0" stereochannel="left">
+           <sets>
+            <Set title="Track" domainroot="foundry.track">
+             <values>
+              <BooleanValue name="foundry.track.enabled" value="Yes" default="1"/>
+             </values>
+            </Set>
+           </sets>
+          </AudioTrack>
+         </audiotracks>
+         <sets>
+          <Set title="Timeline" domainroot="foundry.timeline">
+           <values>
+            <TimeBaseValue name="foundry.timeline.framerate" value="25/1" default="1"/>
+            <TimeBaseValue name="foundry.timeline.samplerate" value="48000/1" default="1"/>
+            <IntegerValue name="foundry.timeline.duration" value="104" default="0"/>
+            <MediaFormatValue name="foundry.timeline.outputformat" value="1,[ 0, 0, 1920, 1080],[ 0, 0, 1920, 1080],HD_1080" default="1"/>
+           </values>
+          </Set>
+         </sets>
+        </Sequence>
+       </SequenceProjectItemVersion>
+      </items>
+      <Sequence objName="sequence" link="internal" guid="{623143c8-f596-0946-a0fe-21e78daa2bfd}"/>
+      <ActiveItemIndex>0</ActiveItemIndex>
+      <TimelineProjectItem objName="Snapshots" name="" editable="1"/>
+     </SequenceProjectItemRoot>
+     <BinProjectItem name="Footage" guid="{993a3840-4526-714f-a8f6-c9dfeb6cc93e}" editable="1">
+      <items>
+       <SequenceProjectItemRoot name="Prestige_ep008_sc111_face_replacment_sh0010_pl01" guid="{5c3742d1-a10c-404d-9218-2721462dbd74}" MasterVersion="D:/VFX_Projects/2024/Drama/PRESTIGE/Footage/Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01.mov" editable="1">
+        <items>
+         <SequenceProjectItemVersion name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01" guid="{c91fe4d6-05e6-8d4d-a5b2-7d432ff7d81a}" isHidden="0" editable="1">
+          <Clip objName="sequence" link="internal" guid="{5b67d82e-46fd-5449-ae16-fd795b6fc8c3}"/>
+         </SequenceProjectItemVersion>
+        </items>
+        <Clip objName="sequence" link="internal" guid="{5b67d82e-46fd-5449-ae16-fd795b6fc8c3}"/>
+        <ActiveItemIndex>0</ActiveItemIndex>
+        <TimelineProjectItem objName="Snapshots" name="" editable="1"/>
+       </SequenceProjectItemRoot>
+       <SequenceProjectItemRoot name="Prestige_ep008_sc111_face_replacment_sh0030_pl01" guid="{b7e7d210-1ed2-254a-b9fd-aceb0879a2c0}" MasterVersion="D:/VFX_Projects/2024/Drama/PRESTIGE/Footage/Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01.mov" editable="1">
+        <items>
+         <SequenceProjectItemVersion name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01" guid="{99c1f4d7-9789-8d4e-8796-791fde0c36bd}" isHidden="0" editable="1">
+          <Clip objName="sequence" link="internal" guid="{6a71f9e8-2072-ff48-88e7-4029c93545f5}"/>
+         </SequenceProjectItemVersion>
+        </items>
+        <Clip objName="sequence" link="internal" guid="{6a71f9e8-2072-ff48-88e7-4029c93545f5}"/>
+        <ActiveItemIndex>0</ActiveItemIndex>
+        <TimelineProjectItem objName="Snapshots" name="" editable="1"/>
+       </SequenceProjectItemRoot>
+      </items>
+      <BinViewType>2</BinViewType>
+      <BinViewZoom>70</BinViewZoom>
+      <BinViewSortColumnIndex>0</BinViewSortColumnIndex>
+      <BinViewSortOrder>0</BinViewSortOrder>
+     </BinProjectItem>
+     <BinProjectItem name="VFX 1" guid="{2abee178-9b49-3b43-99db-954ff247231a}" editable="1">
+      <items>
+       <SequenceProjectItemRoot name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp" guid="{a2befb23-1daf-4640-add0-a66d55043bab}" MasterVersion="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.nk" editable="1">
+        <items>
+         <SequenceProjectItemVersion name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01" guid="{a6b67708-88f4-e142-89fb-ddc2cd7a818e}" isHidden="0" editable="1">
+          <Clip timeOffset="1" displayTimecode="1" objName="sequence" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01" timecodeStart="0" displayDropFrames="0" useSoftTrims="0" guid="{45d15163-cc26-8f49-8909-29a334984650}" timeDisplayFormat="0">
+           <videotracks>
+            <VideoTrack name="Video 1" height="40" guid="de2de5fd-1542-9b4e-846a-7da46a14ced1" collapsed="0">
+             <trackItems>
+              <TrackItem link="internal" guid="{c9e5c66d-1b5e-1441-8aff-2edf1eff1f87}"/>
+             </trackItems>
+             <sets>
+              <Set title="Track" domainroot="foundry.track">
+               <values>
+                <BooleanValue name="foundry.track.enabled" value="Yes" default="1"/>
+               </values>
+              </Set>
+             </sets>
+            </VideoTrack>
+           </videotracks>
+           <sets>
+            <Set title="Timeline" domainroot="foundry.timeline">
+             <values>
+              <TimeBaseValue name="foundry.timeline.framerate" value="25/1" default="1"/>
+              <TimeBaseValue name="foundry.timeline.samplerate" value="0/0" default="1"/>
+              <IntegerValue name="foundry.timeline.duration" value="47" default="0"/>
+              <IntegerValue name="foundry.timeline.poster" value="0" default="1"/>
+              <StringValue name="foundry.timeline.posterLayer" value="colour" default="1"/>
+              <MediaFormatValue name="foundry.timeline.outputformat" value="1,[ 0, 0, 2048, 1152],[ 0, 0, 2048, 1152]," default="1"/>
+              <StringValue name="foundry.timeline.colorSpace" value="matte_paint" default="1"/>
+              <StringValue name="foundry.timeline.readParams" value="AAAAAQAAAAAAAAABAAAACmNvbG9yc3BhY2UAAAAFaW50MzIAAAAA" default="1"/>
+             </values>
+            </Set>
+            <Set title="Media" domainroot="foundry.source">
+             <values>
+              <StringValue name="foundry.source.reelID" value="" default="1"/>
+             </values>
+            </Set>
+           </sets>
+           <node><![CDATA[Read {
+ inputs 0
+ file_type nk
+ file D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.nk
+ format "2048 1152 0 0 2048 1152 1 "
+ last 47
+ origlast 47
+ origset true
+ version 7
+ name Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01_1
+}
+]]></node>
+          </Clip>
+         </SequenceProjectItemVersion>
+         <SequenceProjectItemVersion name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02" guid="{bcdfa4fc-97c3-fb43-bcaf-d62b76a8db8a}" isHidden="0" editable="1">
+          <Clip objName="sequence" link="internal" guid="{10e7bc63-bc1e-8445-b0b8-094f9a215db2}"/>
+         </SequenceProjectItemVersion>
+        </items>
+        <Clip objName="sequence" link="internal" guid="{10e7bc63-bc1e-8445-b0b8-094f9a215db2}"/>
+        <ActiveItemIndex>1</ActiveItemIndex>
+        <TimelineProjectItem objName="Snapshots" name="" editable="1"/>
+       </SequenceProjectItemRoot>
+       <SequenceProjectItemRoot name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp" guid="{9c9b3624-4ade-eb4f-ac9e-fffde683a9b1}" MasterVersion="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.nk" editable="1">
+        <items>
+         <SequenceProjectItemVersion name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01" guid="{ba61623b-a9d7-b44d-9119-f1105d799603}" isHidden="0" editable="1">
+          <Clip timeOffset="1" displayTimecode="1" objName="sequence" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01" timecodeStart="90" displayDropFrames="0" useSoftTrims="0" guid="{528f1c8f-d0f3-8e4c-a94f-2c3004976ec6}" timeDisplayFormat="0">
+           <videotracks>
+            <VideoTrack name="Video 1" height="40" guid="4dda7a9c-5cbc-d849-920c-1b152e794516" collapsed="0">
+             <trackItems>
+              <TrackItem link="internal" guid="{e44dc0d1-ab30-6f41-a0cd-853824ff4a8f}"/>
+             </trackItems>
+             <sets>
+              <Set title="Track" domainroot="foundry.track">
+               <values>
+                <BooleanValue name="foundry.track.enabled" value="Yes" default="1"/>
+               </values>
+              </Set>
+             </sets>
+            </VideoTrack>
+           </videotracks>
+           <sets>
+            <Set title="Timeline" domainroot="foundry.timeline">
+             <values>
+              <TimeBaseValue name="foundry.timeline.framerate" value="25/1" default="1"/>
+              <TimeBaseValue name="foundry.timeline.samplerate" value="0/0" default="1"/>
+              <IntegerValue name="foundry.timeline.duration" value="57" default="0"/>
+              <IntegerValue name="foundry.timeline.poster" value="0" default="1"/>
+              <StringValue name="foundry.timeline.posterLayer" value="colour" default="1"/>
+              <MediaFormatValue name="foundry.timeline.outputformat" value="1,[ 0, 0, 2048, 1152],[ 0, 0, 2048, 1152]," default="1"/>
+              <StringValue name="foundry.timeline.colorSpace" value="color_picking" default="1"/>
+              <StringValue name="foundry.timeline.readParams" value="AAAAAQAAAAAAAAABAAAACmNvbG9yc3BhY2UAAAAFaW50MzIAAAAB" default="1"/>
+             </values>
+            </Set>
+            <Set title="Media" domainroot="foundry.source">
+             <values>
+              <StringValue name="foundry.source.reelID" value="" default="1"/>
+             </values>
+            </Set>
+           </sets>
+           <node><![CDATA[Read {
+ inputs 0
+ file_type nk
+ file D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.nk
+ format "2048 1152 0 0 2048 1152 1 "
+ last 57
+ origlast 57
+ origset true
+ version 5
+ colorspace color_picking
+ name Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01_1
+}
+]]></node>
+          </Clip>
+         </SequenceProjectItemVersion>
+         <SequenceProjectItemVersion name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02" guid="{60ede075-112e-2a4c-aacc-eabdcc0b835e}" isHidden="0" editable="1">
+          <Clip objName="sequence" link="internal" guid="{a0c0f786-f4f8-fe44-871a-3ea2621c2706}"/>
+         </SequenceProjectItemVersion>
+        </items>
+        <Clip objName="sequence" link="internal" guid="{a0c0f786-f4f8-fe44-871a-3ea2621c2706}"/>
+        <ActiveItemIndex>1</ActiveItemIndex>
+        <TimelineProjectItem objName="Snapshots" name="" editable="1"/>
+       </SequenceProjectItemRoot>
+      </items>
+      <BinViewType>2</BinViewType>
+      <BinViewZoom>70</BinViewZoom>
+      <BinViewSortColumnIndex>0</BinViewSortColumnIndex>
+      <BinViewSortOrder>0</BinViewSortOrder>
+     </BinProjectItem>
+    </items>
+    <BinViewType>2</BinViewType>
+    <BinViewZoom>70</BinViewZoom>
+    <BinViewSortColumnIndex>0</BinViewSortColumnIndex>
+    <BinViewSortOrder>0</BinViewSortOrder>
+    <AllowedItems>13</AllowedItems>
+   </RootBinProjectItem>
+   <RootBinProjectItem name="Tags" guid="{3d16be00-87cb-334c-b789-cb737aec7dc1}" editable="1">
+    <BinViewType>2</BinViewType>
+    <BinViewZoom>70</BinViewZoom>
+    <BinViewSortColumnIndex>0</BinViewSortColumnIndex>
+    <BinViewSortOrder>0</BinViewSortOrder>
+    <AllowedItems>17</AllowedItems>
+   </RootBinProjectItem>
+  </items>
+  <BinViewType>2</BinViewType>
+  <BinViewZoom>70</BinViewZoom>
+  <BinViewSortColumnIndex>0</BinViewSortColumnIndex>
+  <BinViewSortOrder>0</BinViewSortOrder>
+  <AllowedItems>-1</AllowedItems>
+  <RootBinProjectItem objName="sequencesBin" link="internal" guid="{982f74b3-02bc-b647-9195-d8e2489efb65}"/>
+  <RootBinProjectItem objName="tagsBin" link="internal" guid="{3d16be00-87cb-334c-b789-cb737aec7dc1}"/>
+  <MediaFormatValue objName="outputformat" name="" value="1,[ 0, 0, 2048, 1152],[ 0, 0, 2048, 1152],Custom Format" default="0"/>
+  <Views>
+   <View color="#ffffff" name="main"/>
+  </Views>
+  <exportHistory>
+   <ExportHistory>
+    <data><![CDATA[<root presetname="Basic Nuke Shot With Annotations" tasktype="hiero.exporters.FnShotProcessor.ShotProcessor"><startFrameIndex valuetype="int">1001</startFrameIndex><exportRoot valuetype="str">{projectroot}</exportRoot><versionIndex valuetype="int">1</versionIndex><cutUseHandles valuetype="bool">False</cutUseHandles><versionPadding valuetype="int">2</versionPadding><exportTemplate valuetype="list"><SequenceItem valuetype="tuple"><SequenceItem valuetype="str">{shot}/nuke/script/{shot}_comp{_nameindex}_{version}.{ext}</SequenceItem><SequenceItem valuetype="hiero.exporters.FnNukeShotExporter.NukeShotPreset"><root presetname="" tasktype="hiero.exporters.FnNukeShotExporter.NukeShotExporter"><postProcessScript valuetype="bool">False</postProcessScript><annotationsPreCompPaths valuetype="list"><SequenceItem valuetype="str">{shot}/nuke/annotations/{shot}_comp_annotations_{version}.{ext}</SequenceItem></annotationsPreCompPaths><useRelativePaths valuetype="bool">False</useRelativePaths><readPaths valuetype="list" /><connectTracks valuetype="bool">False</connectTracks><collateSequence valuetype="bool">False</collateSequence><additionalNodesData valuetype="list" /><collateShotNames valuetype="bool">False</collateShotNames><includeEffects valuetype="bool">True</includeEffects><writePaths valuetype="list"><SequenceItem valuetype="str">{shot}/nuke/renders/{shot}_comp{_nameindex}_{version}.####.{ext}</SequenceItem></writePaths><reformat valuetype="dict"><filter valuetype="str">Cubic</filter><to_type valuetype="str">Plate Resolution</to_type><center valuetype="bool">True</center><resize valuetype="str">width</resize></reformat><method valuetype="str">Blend</method><includeAnnotations valuetype="bool">False</includeAnnotations><enable valuetype="bool">True</enable><showAnnotations valuetype="bool">True</showAnnotations><collateCustomStart valuetype="bool">True</collateCustomStart><additionalNodesEnabled valuetype="bool">False</additionalNodesEnabled><timelineWriteNode valuetype="str">{shot}/nuke/renders/{shot}_comp{_nameindex}_{version}.####.{ext}</timelineWriteNode><collateTracks valuetype="bool">False</collateTracks></root></SequenceItem></SequenceItem><SequenceItem valuetype="tuple"><SequenceItem valuetype="str">{shot}/nuke/renders/{shot}_comp{_nameindex}_{version}.####.{ext}</SequenceItem><SequenceItem valuetype="hiero.exporters.FnExternalRender.NukeRenderPreset"><root presetname="" tasktype="hiero.exporters.FnExternalRender.NukeRenderTask"><colourspace valuetype="str">default</colourspace><views valuetype="list"><SequenceItem valuetype="str">all</SequenceItem></views><file_type valuetype="str">jpeg</file_type><create_directories valuetype="bool">True</create_directories><mov valuetype="dict"><mov64_fast_start valuetype="str">true</mov64_fast_start><mov64_write_timecode valuetype="str">true</mov64_write_timecode><mov64_codec valuetype="str">appr</mov64_codec><mov_prores_codec_profile valuetype="str">ProRes 4:4:4:4 12-bit</mov_prores_codec_profile><encoder valuetype="str">mov64</encoder></mov><jpeg valuetype="dict"><_jpeg_quality valuetype="float">0.75</_jpeg_quality></jpeg><channels valuetype="str">rgb</channels><png valuetype="dict"><datatype valuetype="str">16 bit</datatype></png><burninDataEnabled valuetype="bool">False</burninDataEnabled><colorspace valuetype="str">Output - Rec.709</colorspace><dpx valuetype="dict"><datatype valuetype="str">10 bit</datatype><transfer valuetype="str">(auto detect)</transfer><bigEndian valuetype="bool">True</bigEndian><fill valuetype="bool">False</fill></dpx><burninData valuetype="dict"><burnIn_bottomRight valuetype="NoneType">None</burnIn_bottomRight><burnIn_topLeft valuetype="NoneType">None</burnIn_topLeft><burnIn_topMiddle valuetype="NoneType">None</burnIn_topMiddle><burnIn_padding valuetype="NoneType">None</burnIn_padding><burnIn_topRight valuetype="NoneType">None</burnIn_topRight><burnIn_bottomMiddle valuetype="NoneType">None</burnIn_bottomMiddle><burnIn_bottomLeft valuetype="NoneType">None</burnIn_bottomLeft><burnIn_textSize valuetype="NoneType">None</burnIn_textSize><burnIn_font valuetype="NoneType">None</burnIn_font></burninData><writeNodeName valuetype="str">Write_{ext}</writeNodeName><reformat valuetype="dict"><filter valuetype="str">Cubic</filter><to_type valuetype="str">None</to_type><scale valuetype="float">1.0</scale><center valuetype="bool">True</center><resize valuetype="str">width</resize></reformat></root></SequenceItem></SequenceItem><SequenceItem valuetype="tuple"><SequenceItem valuetype="str">{shot}/nuke/renders/{shot}_comp{_nameindex}_{version}.####.{ext}</SequenceItem><SequenceItem valuetype="hiero.exporters.FnExternalRender.NukeRenderPreset"><root presetname="hiero.exporters.FnExternalRender.NukeRenderTask" tasktype="hiero.exporters.FnExternalRender.NukeRenderTask"><burninDataEnabled valuetype="bool">False</burninDataEnabled><colourspace valuetype="str">default</colourspace><views valuetype="list"><SequenceItem valuetype="str">all</SequenceItem></views><file_type valuetype="str">mov</file_type><create_directories valuetype="bool">True</create_directories><mov valuetype="dict"><mov64_fast_start valuetype="str">true</mov64_fast_start><mov64_write_timecode valuetype="str">true</mov64_write_timecode><mov64_codec valuetype="str">appr</mov64_codec><mov_prores_codec_profile valuetype="str">ProRes 4:4:4:4 12-bit</mov_prores_codec_profile><encoder valuetype="str">mov64</encoder></mov><dpx valuetype="dict"><datatype valuetype="str">8 bit</datatype><transfer valuetype="str">(auto detect)</transfer><bigEndian valuetype="bool">True</bigEndian><fill valuetype="bool">False</fill></dpx><channels valuetype="str">rgb</channels><burninData valuetype="dict"><burnIn_bottomRight valuetype="NoneType">None</burnIn_bottomRight><burnIn_topLeft valuetype="NoneType">None</burnIn_topLeft><burnIn_topMiddle valuetype="NoneType">None</burnIn_topMiddle><burnIn_padding valuetype="NoneType">None</burnIn_padding><burnIn_topRight valuetype="NoneType">None</burnIn_topRight><burnIn_bottomMiddle valuetype="NoneType">None</burnIn_bottomMiddle><burnIn_bottomLeft valuetype="NoneType">None</burnIn_bottomLeft><burnIn_textSize valuetype="NoneType">None</burnIn_textSize><burnIn_font valuetype="NoneType">None</burnIn_font></burninData><writeNodeName valuetype="str">Write_{ext}</writeNodeName><reformat valuetype="dict"><filter valuetype="str">Cubic</filter><to_type valuetype="str">None</to_type><scale valuetype="float">1.0</scale><center valuetype="bool">True</center><resize valuetype="str">width</resize></reformat></root></SequenceItem></SequenceItem><SequenceItem valuetype="tuple"><SequenceItem valuetype="str">{shot}/nuke/annotations/{shot}_comp_annotations_{version}.{ext}</SequenceItem><SequenceItem valuetype="hiero.exporters.FnNukeAnnotationsExporter.NukeAnnotationsPreset"><root presetname="" tasktype="hiero.exporters.FnNukeAnnotationsExporter.NukeAnnotationsExporter"><postProcessScript valuetype="bool">False</postProcessScript><annotationsPreCompPaths valuetype="list" /><useRelativePaths valuetype="bool">False</useRelativePaths><readPaths valuetype="list" /><connectTracks valuetype="bool">False</connectTracks><collateSequence valuetype="bool">False</collateSequence><additionalNodesData valuetype="list" /><collateShotNames valuetype="bool">False</collateShotNames><includeEffects valuetype="bool">True</includeEffects><writePaths valuetype="list"><SequenceItem valuetype="str">{shot}/nuke/annotations/{shot}_comp_annotations_{version}.####.{ext}</SequenceItem></writePaths><reformat valuetype="dict"><filter valuetype="str">Cubic</filter><to_type valuetype="str">Plate Resolution</to_type><center valuetype="bool">True</center><resize valuetype="str">width</resize></reformat><method valuetype="str">Blend</method><includeAnnotations valuetype="bool">True</includeAnnotations><enable valuetype="bool">True</enable><showAnnotations valuetype="bool">True</showAnnotations><collateCustomStart valuetype="bool">True</collateCustomStart><additionalNodesEnabled valuetype="bool">False</additionalNodesEnabled><timelineWriteNode valuetype="str">{shot}/nuke/annotations/{shot}_comp_annotations_{version}.####.{ext}</timelineWriteNode><collateTracks valuetype="bool">False</collateTracks></root></SequenceItem></SequenceItem><SequenceItem valuetype="tuple"><SequenceItem valuetype="str">{shot}/nuke/annotations/{shot}_comp_annotations_{version}.####.{ext}</SequenceItem><SequenceItem valuetype="hiero.exporters.FnExternalRender.NukeRenderPreset"><root presetname="" tasktype="hiero.exporters.FnExternalRender.NukeRenderTask"><burninDataEnabled valuetype="bool">False</burninDataEnabled><colourspace valuetype="str">default</colourspace><views valuetype="list"><SequenceItem valuetype="str">all</SequenceItem></views><file_type valuetype="str">dpx</file_type><create_directories valuetype="bool">True</create_directories><dpx valuetype="dict"><datatype valuetype="str">10 bit</datatype></dpx><channels valuetype="str">rgb</channels><burninData valuetype="dict"><burnIn_bottomRight valuetype="NoneType">None</burnIn_bottomRight><burnIn_topLeft valuetype="NoneType">None</burnIn_topLeft><burnIn_topMiddle valuetype="NoneType">None</burnIn_topMiddle><burnIn_padding valuetype="NoneType">None</burnIn_padding><burnIn_topRight valuetype="NoneType">None</burnIn_topRight><burnIn_bottomMiddle valuetype="NoneType">None</burnIn_bottomMiddle><burnIn_bottomLeft valuetype="NoneType">None</burnIn_bottomLeft><burnIn_textSize valuetype="NoneType">None</burnIn_textSize><burnIn_font valuetype="NoneType">None</burnIn_font></burninData><writeNodeName valuetype="str">Write_{ext}</writeNodeName><reformat valuetype="dict"><filter valuetype="str">Cubic</filter><to_type valuetype="str">None</to_type><scale valuetype="float">1.0</scale><center valuetype="bool">True</center><resize valuetype="str">width</resize></reformat></root></SequenceItem></SequenceItem></exportTemplate><excludeTags valuetype="list" /><includeTags valuetype="list" /><id valuetype="str">46a0aac51b8f8da3416a6f19f3011baf</id><includeRetimes valuetype="bool">False</includeRetimes><startFrameSource valuetype="str">Source</startFrameSource><cutLength valuetype="bool">True</cutLength><cutHandles valuetype="int">12</cutHandles></root>]]></data>
+   </ExportHistory>
+  </exportHistory>
+  <formats>
+   <format name="Custom Format" height="1152" pixelAspect="1" width="2048"/>
+  </formats>
+ </Project>
+ <UIState>
+  <items>
+   <Viewer audioLatencyMs="0" time="0" mode="0" audioMute="0" objectname="uk.co.thefoundry.sequenceviewer.5" audioLevel="50">
+    <players>
+     <player channels="0" zoomMode="2" repeatMode="2" time="0" LUT="ACES/sRGB" displayGamma="1" scaleX="0.252083" displayGain="1" translateX="1" rotate="0" lod="-1" playSpeed="1" translateY="1" scaleY="0.252083">
+      <Sequence objName="timeline" link="internal" guid="{623143c8-f596-0946-a0fe-21e78daa2bfd}"/>
+     </player>
+     <player channels="0" zoomMode="2" repeatMode="0" time="0" LUT="ACES/sRGB" displayGamma="1" scaleX="0.118164" displayGain="1" translateX="0" rotate="0" lod="-1" playSpeed="1" translateY="0" scaleY="0.118164"/>
+    </players>
+   </Viewer>
+   <TimelineEditor lastVisibleTime="108" firstVisibleTime="0" objectname="uk.co.thefoundry.timeline.3">
+    <SequenceProjectItemVersion objName="timeline" link="internal" guid="{6889d735-1965-f442-ade2-8fffaabf9d62}"/>
+    <Viewer objName="viewer" link="internal" guid="{92c8c6cc-c6d4-1241-a925-51220893ff5c}"/>
+   </TimelineEditor>
+  </items>
+ </UIState>
+ <trackItemCollection>
+  <TrackItem timelineIn="0" matchdescription="" boxSizeWidth="200" sourceDuration="47" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_v01" enabled="1" guid="{5f8cc897-7683-a942-b95e-82b88554a261}" channelIndex="0" boxSizeHeight="200" streamIndex="-1" resizeType="1" playbackSpeed="1" boxForceShape="0" type="1" resizeCenter="1" boxPAR="1" versionlinked="0" clipSequenceTrackIndex="0" conformScore="0" sourceIn="0" timelineDuration="47" outputChannel="-2">
+   <TrackItemLinkGroup objName="links" link="internal" guid="{42620a1c-feb8-d94f-81b4-3f51a965cf00}"/>
+   <MediaFlags objName="flags" allone="1"/>
+   <MediaType type="0" objName="type"/>
+   <Look objName="look">
+    <CompositeEffect objName="effects"/>
+    <Effect objName="preprocessed" name="">
+     <values>
+      <EffectParameter source="0">
+       <EnumValue objName="value" name="foundry.effect.blendfunc" value="0" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.valuesource" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.domainroot" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.enabled" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <FloatValue objName="value" name="foundry.effect.opacity" value="1" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.expanded" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="colourspacename" value="error" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <IntegerValue objName="value" name="ycbcrmatrix" value="0" default="1"/>
+      </EffectParameter>
+     </values>
+    </Effect>
+   </Look>
+   <MediaDesc objName="mediatype" channelIndex="0" streamIndex="-1" outputChannel="-2">
+    <MediaFlags objName="flags" allone="1"/>
+    <MediaType type="0" objName="type"/>
+   </MediaDesc>
+   <MediaGroup objName="media">
+    <groupdata>
+     <MediaInstance_Vector quality="0">
+      <Source objName="media" link="internal" guid="{f19935bd-2717-1149-b128-5bd77cb90ea1}"/>
+     </MediaInstance_Vector>
+    </groupdata>
+   </MediaGroup>
+   <MediaHashes>
+    <MediaHash hash="77cdd1fe0efcc43b3f68f0e223a0a08412fda563b3f09aef32dc4858322963ca" frameOffset="0"/>
+   </MediaHashes>
+  </TrackItem>
+  <TrackItem timelineIn="0" matchdescription="" boxSizeWidth="200" sourceDuration="47" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01" enabled="1" guid="{cf8dcdd0-5c06-ef4d-a338-6950c6ed205f}" channelIndex="0" boxSizeHeight="200" streamIndex="-1" resizeType="1" playbackSpeed="1" boxForceShape="0" type="0" resizeCenter="1" boxPAR="1" versionlinked="1" clipSequenceTrackIndex="0" conformScore="0" sourceIn="0" timelineDuration="47" outputChannel="-2">
+   <sets>
+    <Set title="User" domainroot="user">
+     <values>
+      <VectorValue name="user.tags">
+       <values>
+        <TagValue name="user.tags">
+         <TagInstance icon="icons:Nuke.png" objName="value" name="Nuke Project File 2025/02/02 19:09:14" guid="c9a8d634-33ae-2f4c-85df-23d8eef1a846" editable="1" visible="1">
+          <sets>
+           <Set title="" domainroot="tag">
+            <values>
+             <StringValue name="tag.label" value="Nuke Project File 2025/02/02 19:09:14" default="1"/>
+             <BooleanValue name="tag.applieswhole" value="Yes" default="1"/>
+             <StringValue name="tag.appliedretimes" value="0" default="1"/>
+             <StringValue name="tag.description" value="Nuke Project File" default="1"/>
+             <StringValue name="tag.duration" value="47" default="1"/>
+             <StringValue name="tag.endhandle" value="0" default="1"/>
+             <StringValue name="tag.format" value="2048 1152 0 0 2048 1152 1;2048 1152 0 0 2048 1152 1" default="1"/>
+             <StringValue name="tag.frameoffset" value="0" default="1"/>
+             <StringValue name="tag.localtime" value="time.struct_time(tm_year=2025, tm_mon=2, tm_mday=2, tm_hour=19, tm_min=9, tm_sec=14, tm_wday=6, tm_yday=33, tm_isdst=0)" default="1"/>
+             <StringValue name="tag.path" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.%04d.jpg;D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.mov" default="1"/>
+             <StringValue name="tag.pathtemplate" value="{projectroot}\{shot}/nuke/script/{shot}_comp{_nameindex}_{version}.{ext}" default="1"/>
+             <StringValue name="tag.presetid" value="46a0aac51b8f8da3416a6f19f3011baf" default="1"/>
+             <StringValue name="tag.script" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01.nk" default="1"/>
+             <StringValue name="tag.scriptannotations" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0010_pl01/nuke/annotations/Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_annotations_v01.nk" default="1"/>
+             <StringValue name="tag.sourceretime" value="1.0" default="1"/>
+             <StringValue name="tag.startframe" value="1" default="1"/>
+             <StringValue name="tag.starthandle" value="0" default="1"/>
+             <StringValue name="tag.track" value="6921026C-50BC-3445-A15E-AB7CA181AFF1" default="1"/>
+             <StringValue name="tag.trackItem" value="D2162B36-2D7C-CF48-8C18-B3DE1B814090" default="1"/>
+            </values>
+           </Set>
+          </sets>
+         </TagInstance>
+        </TagValue>
+       </values>
+      </VectorValue>
+     </values>
+    </Set>
+   </sets>
+   <TrackItemLinkGroup objName="links" link="internal" guid="{1c71c7d4-2067-ee40-9507-83cca45677ae}"/>
+   <MediaFlags objName="flags" allone="1"/>
+   <MediaType type="0" objName="type"/>
+   <Look objName="look">
+    <CompositeEffect objName="effects"/>
+   </Look>
+   <MediaDesc objName="mediatype" channelIndex="0" streamIndex="-1" outputChannel="-2">
+    <MediaFlags objName="flags" allone="1"/>
+    <MediaType type="0" objName="type"/>
+   </MediaDesc>
+   <MediaGroup objName="media">
+    <groupdata>
+     <MediaInstance_Vector quality="0">
+      <Clip objName="media" link="internal" guid="{5b67d82e-46fd-5449-ae16-fd795b6fc8c3}"/>
+     </MediaInstance_Vector>
+    </groupdata>
+   </MediaGroup>
+  </TrackItem>
+  <TrackItem timelineIn="0" matchdescription="" boxSizeWidth="200" sourceDuration="57" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_v01" enabled="1" guid="{03952027-8688-314f-b8ec-3ec059087bde}" channelIndex="0" boxSizeHeight="200" streamIndex="-1" resizeType="1" playbackSpeed="1" boxForceShape="0" type="1" resizeCenter="1" boxPAR="1" versionlinked="0" clipSequenceTrackIndex="0" conformScore="0" sourceIn="0" timelineDuration="57" outputChannel="-2">
+   <TrackItemLinkGroup objName="links" link="internal" guid="{3d393e40-29f7-d243-a419-03ecb83f8936}"/>
+   <MediaFlags objName="flags" allone="1"/>
+   <MediaType type="0" objName="type"/>
+   <Look objName="look">
+    <CompositeEffect objName="effects"/>
+    <Effect objName="preprocessed" name="">
+     <values>
+      <EffectParameter source="0">
+       <EnumValue objName="value" name="foundry.effect.blendfunc" value="0" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.valuesource" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.domainroot" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.enabled" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <FloatValue objName="value" name="foundry.effect.opacity" value="1" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.expanded" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="colourspacename" value="error" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <IntegerValue objName="value" name="ycbcrmatrix" value="0" default="1"/>
+      </EffectParameter>
+     </values>
+    </Effect>
+   </Look>
+   <MediaDesc objName="mediatype" channelIndex="0" streamIndex="-1" outputChannel="-2">
+    <MediaFlags objName="flags" allone="1"/>
+    <MediaType type="0" objName="type"/>
+   </MediaDesc>
+   <MediaGroup objName="media">
+    <groupdata>
+     <MediaInstance_Vector quality="0">
+      <Source objName="media" link="internal" guid="{0b57c6e2-7fe6-f046-8038-bd6b02ede9d3}"/>
+     </MediaInstance_Vector>
+    </groupdata>
+   </MediaGroup>
+   <MediaHashes>
+    <MediaHash hash="6727fba9057377542687b9dbbcafeb9c326cf79d8b7a18743692b32450621d7c" frameOffset="0"/>
+   </MediaHashes>
+  </TrackItem>
+  <TrackItem timelineIn="47" matchdescription="" boxSizeWidth="200" sourceDuration="57" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01" enabled="1" guid="{02f96ed7-9f91-e048-b7e4-8af2bcedf694}" channelIndex="0" boxSizeHeight="200" streamIndex="-1" resizeType="1" playbackSpeed="1" boxForceShape="0" type="0" resizeCenter="1" boxPAR="1" versionlinked="1" clipSequenceTrackIndex="0" conformScore="0" sourceIn="0" timelineDuration="57" outputChannel="-2">
+   <sets>
+    <Set title="User" domainroot="user">
+     <values>
+      <VectorValue name="user.tags">
+       <values>
+        <TagValue name="user.tags">
+         <TagInstance icon="icons:Nuke.png" objName="value" name="Nuke Project File 2025/02/02 19:09:14" guid="7cc222db-d39a-eb4b-8cbb-dc33be0d6353" editable="1" visible="1">
+          <sets>
+           <Set title="" domainroot="tag">
+            <values>
+             <StringValue name="tag.label" value="Nuke Project File 2025/02/02 19:09:14" default="1"/>
+             <BooleanValue name="tag.applieswhole" value="Yes" default="1"/>
+             <StringValue name="tag.appliedretimes" value="0" default="1"/>
+             <StringValue name="tag.description" value="Nuke Project File" default="1"/>
+             <StringValue name="tag.duration" value="57" default="1"/>
+             <StringValue name="tag.endhandle" value="0" default="1"/>
+             <StringValue name="tag.format" value="2048 1152 0 0 2048 1152 1;2048 1152 0 0 2048 1152 1" default="1"/>
+             <StringValue name="tag.frameoffset" value="0" default="1"/>
+             <StringValue name="tag.localtime" value="time.struct_time(tm_year=2025, tm_mon=2, tm_mday=2, tm_hour=19, tm_min=9, tm_sec=14, tm_wday=6, tm_yday=33, tm_isdst=0)" default="1"/>
+             <StringValue name="tag.path" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.%04d.jpg;D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/renders/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.mov" default="1"/>
+             <StringValue name="tag.pathtemplate" value="{projectroot}\{shot}/nuke/script/{shot}_comp{_nameindex}_{version}.{ext}" default="1"/>
+             <StringValue name="tag.presetid" value="46a0aac51b8f8da3416a6f19f3011baf" default="1"/>
+             <StringValue name="tag.script" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/script/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01.nk" default="1"/>
+             <StringValue name="tag.scriptannotations" value="D:/VFX_Projects/2024/Drama/PRESTIGE/scripts/Prestige_ep008_sc111_face_replacment_sh0030_pl01/nuke/annotations/Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_annotations_v01.nk" default="1"/>
+             <StringValue name="tag.sourceretime" value="1.0" default="1"/>
+             <StringValue name="tag.startframe" value="1" default="1"/>
+             <StringValue name="tag.starthandle" value="0" default="1"/>
+             <StringValue name="tag.track" value="6921026C-50BC-3445-A15E-AB7CA181AFF1" default="1"/>
+             <StringValue name="tag.trackItem" value="DD10AD69-BEC3-7941-A632-E552151EE6CB" default="1"/>
+            </values>
+           </Set>
+          </sets>
+         </TagInstance>
+        </TagValue>
+       </values>
+      </VectorValue>
+     </values>
+    </Set>
+   </sets>
+   <TrackItemLinkGroup objName="links" link="internal" guid="{44a98550-ecbc-1541-8700-3c8116a57573}"/>
+   <MediaFlags objName="flags" allone="1"/>
+   <MediaType type="0" objName="type"/>
+   <Look objName="look">
+    <CompositeEffect objName="effects"/>
+   </Look>
+   <MediaDesc objName="mediatype" channelIndex="0" streamIndex="-1" outputChannel="-2">
+    <MediaFlags objName="flags" allone="1"/>
+    <MediaType type="0" objName="type"/>
+   </MediaDesc>
+   <MediaGroup objName="media">
+    <groupdata>
+     <MediaInstance_Vector quality="0">
+      <Clip objName="media" link="internal" guid="{6a71f9e8-2072-ff48-88e7-4029c93545f5}"/>
+     </MediaInstance_Vector>
+    </groupdata>
+   </MediaGroup>
+  </TrackItem>
+  <TrackItem timelineIn="0" matchdescription="" boxSizeWidth="200" sourceDuration="47" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v02" enabled="1" guid="{a0fb5eaf-9d02-1543-8d18-575af8a40dac}" channelIndex="0" boxSizeHeight="200" streamIndex="-1" resizeType="1" playbackSpeed="1" boxForceShape="0" type="1" resizeCenter="1" boxPAR="1" versionlinked="0" clipSequenceTrackIndex="0" conformScore="0" sourceIn="1" timelineDuration="47" outputChannel="-2">
+   <MediaFlags objName="flags" allone="1"/>
+   <MediaType type="0" objName="type"/>
+   <Look objName="look">
+    <CompositeEffect objName="effects"/>
+    <Effect objName="preprocessed" name="">
+     <values>
+      <EffectParameter source="0">
+       <EnumValue objName="value" name="foundry.effect.blendfunc" value="0" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.valuesource" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.domainroot" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.enabled" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <FloatValue objName="value" name="foundry.effect.opacity" value="1" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.expanded" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="colourspacename" value="default" default="1"/>
+      </EffectParameter>
+     </values>
+    </Effect>
+   </Look>
+   <MediaDesc objName="mediatype" channelIndex="0" streamIndex="-1" outputChannel="-2">
+    <MediaFlags objName="flags" allone="1"/>
+    <MediaType type="0" objName="type"/>
+   </MediaDesc>
+   <MediaGroup objName="media">
+    <groupdata>
+     <MediaInstance_Vector quality="0">
+      <Source objName="media" link="internal" guid="{800c9e26-4cfa-474c-827c-34c865cd7c42}"/>
+     </MediaInstance_Vector>
+    </groupdata>
+   </MediaGroup>
+   <MediaHashes>
+    <MediaHash hash="00c8e721b05b7608a91235c6310585cd8e9b3602f30fdf7fba423be76ec1aecb" frameOffset="0"/>
+   </MediaHashes>
+  </TrackItem>
+  <TrackItem timelineIn="0" matchdescription="" boxSizeWidth="200" sourceDuration="47" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01" enabled="1" guid="{d2162b36-2d7c-cf48-8c18-b3de1b814090}" channelIndex="0" boxSizeHeight="200" streamIndex="-1" resizeType="1" playbackSpeed="1" boxForceShape="0" type="0" resizeCenter="1" boxPAR="1" versionlinked="1" clipSequenceTrackIndex="-1" conformScore="0" sourceIn="0" timelineDuration="47" outputChannel="-2">
+   <sets>
+    <Set title="User" domainroot="user">
+     <values>
+      <VectorValue name="user.tags">
+       <values>
+        <TagValue name="user.tags">
+         <TagInstance icon="icons:NukeVFX.png" objName="value" name="VFX" guid="bef4fc37-d5d3-6345-b65d-f872855ab4a3" editable="1" visible="0">
+          <sets>
+           <Set title="" domainroot="tag">
+            <values>
+             <StringValue name="tag.label" value="VFX" default="1"/>
+             <BooleanValue name="tag.applieswhole" value="Yes" default="1"/>
+             <StringValue name="tag.originaltrackitem" value="CF8DCDD0-5C06-EF4D-A338-6950C6ED205F" default="1"/>
+            </values>
+           </Set>
+          </sets>
+         </TagInstance>
+        </TagValue>
+       </values>
+      </VectorValue>
+     </values>
+    </Set>
+   </sets>
+   <MediaFlags objName="flags" allone="0">
+    <keys>
+     <string_Vector string="Chan 0"/>
+    </keys>
+   </MediaFlags>
+   <MediaType type="0" objName="type"/>
+   <Look objName="look">
+    <CompositeEffect objName="effects"/>
+   </Look>
+   <MediaDesc objName="mediatype" channelIndex="0" streamIndex="-1" outputChannel="-2">
+    <MediaFlags objName="flags" allone="0">
+     <keys>
+      <string_Vector string="Chan 0"/>
+     </keys>
+    </MediaFlags>
+    <MediaType type="0" objName="type"/>
+   </MediaDesc>
+   <MediaGroup objName="media">
+    <groupdata>
+     <MediaInstance_Vector quality="0">
+      <Clip objName="media" link="internal" guid="{10e7bc63-bc1e-8445-b0b8-094f9a215db2}"/>
+     </MediaInstance_Vector>
+    </groupdata>
+   </MediaGroup>
+  </TrackItem>
+  <TrackItem timelineIn="0" matchdescription="" boxSizeWidth="200" sourceDuration="57" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v02" enabled="1" guid="{28072d74-9396-4d42-a27b-5414d6898b37}" channelIndex="0" boxSizeHeight="200" streamIndex="-1" resizeType="1" playbackSpeed="1" boxForceShape="0" type="1" resizeCenter="1" boxPAR="1" versionlinked="0" clipSequenceTrackIndex="0" conformScore="0" sourceIn="1" timelineDuration="57" outputChannel="-2">
+   <MediaFlags objName="flags" allone="1"/>
+   <MediaType type="0" objName="type"/>
+   <Look objName="look">
+    <CompositeEffect objName="effects"/>
+    <Effect objName="preprocessed" name="">
+     <values>
+      <EffectParameter source="0">
+       <EnumValue objName="value" name="foundry.effect.blendfunc" value="0" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.valuesource" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.domainroot" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.enabled" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <FloatValue objName="value" name="foundry.effect.opacity" value="1" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.expanded" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="colourspacename" value="default" default="1"/>
+      </EffectParameter>
+     </values>
+    </Effect>
+   </Look>
+   <MediaDesc objName="mediatype" channelIndex="0" streamIndex="-1" outputChannel="-2">
+    <MediaFlags objName="flags" allone="1"/>
+    <MediaType type="0" objName="type"/>
+   </MediaDesc>
+   <MediaGroup objName="media">
+    <groupdata>
+     <MediaInstance_Vector quality="0">
+      <Source objName="media" link="internal" guid="{6c636fea-d646-574a-9156-96626a169dae}"/>
+     </MediaInstance_Vector>
+    </groupdata>
+   </MediaGroup>
+   <MediaHashes>
+    <MediaHash hash="36f6e7d392049871d1c795283c19152ce627d85d669b5411ef3a2d988a5ddfe0" frameOffset="0"/>
+   </MediaHashes>
+  </TrackItem>
+  <TrackItem timelineIn="47" matchdescription="" boxSizeWidth="200" sourceDuration="57" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01" enabled="1" guid="{dd10ad69-bec3-7941-a632-e552151ee6cb}" channelIndex="0" boxSizeHeight="200" streamIndex="-1" resizeType="1" playbackSpeed="1" boxForceShape="0" type="0" resizeCenter="1" boxPAR="1" versionlinked="1" clipSequenceTrackIndex="-1" conformScore="0" sourceIn="0" timelineDuration="57" outputChannel="-2">
+   <sets>
+    <Set title="User" domainroot="user">
+     <values>
+      <VectorValue name="user.tags">
+       <values>
+        <TagValue name="user.tags">
+         <TagInstance icon="icons:NukeVFX.png" objName="value" name="VFX" guid="90f8b25a-3d9a-e54a-b07a-fdbc492d01e6" editable="1" visible="0">
+          <sets>
+           <Set title="" domainroot="tag">
+            <values>
+             <StringValue name="tag.label" value="VFX" default="1"/>
+             <BooleanValue name="tag.applieswhole" value="Yes" default="1"/>
+             <StringValue name="tag.originaltrackitem" value="02F96ED7-9F91-E048-B7E4-8AF2BCEDF694" default="1"/>
+            </values>
+           </Set>
+          </sets>
+         </TagInstance>
+        </TagValue>
+       </values>
+      </VectorValue>
+     </values>
+    </Set>
+   </sets>
+   <MediaFlags objName="flags" allone="0">
+    <keys>
+     <string_Vector string="Chan 0"/>
+    </keys>
+   </MediaFlags>
+   <MediaType type="0" objName="type"/>
+   <Look objName="look">
+    <CompositeEffect objName="effects"/>
+   </Look>
+   <MediaDesc objName="mediatype" channelIndex="0" streamIndex="-1" outputChannel="-2">
+    <MediaFlags objName="flags" allone="0">
+     <keys>
+      <string_Vector string="Chan 0"/>
+     </keys>
+    </MediaFlags>
+    <MediaType type="0" objName="type"/>
+   </MediaDesc>
+   <MediaGroup objName="media">
+    <groupdata>
+     <MediaInstance_Vector quality="0">
+      <Clip objName="media" link="internal" guid="{a0c0f786-f4f8-fe44-871a-3ea2621c2706}"/>
+     </MediaInstance_Vector>
+    </groupdata>
+   </MediaGroup>
+  </TrackItem>
+  <TrackItem timelineIn="0" matchdescription="" boxSizeWidth="200" sourceDuration="47" name="Prestige_ep008_sc111_face_replacment_sh0010_pl01_comp_v01" enabled="1" guid="{c9e5c66d-1b5e-1441-8aff-2edf1eff1f87}" channelIndex="0" boxSizeHeight="200" streamIndex="-1" resizeType="1" playbackSpeed="1" boxForceShape="0" type="1" resizeCenter="1" boxPAR="1" versionlinked="0" clipSequenceTrackIndex="0" conformScore="0" sourceIn="1" timelineDuration="47" outputChannel="-2">
+   <MediaFlags objName="flags" allone="1"/>
+   <MediaType type="0" objName="type"/>
+   <Look objName="look">
+    <CompositeEffect objName="effects"/>
+    <Effect objName="preprocessed" name="">
+     <values>
+      <EffectParameter source="0">
+       <EnumValue objName="value" name="foundry.effect.blendfunc" value="0" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.valuesource" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.domainroot" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.enabled" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <FloatValue objName="value" name="foundry.effect.opacity" value="1" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.expanded" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="colourspacename" value="default" default="1"/>
+      </EffectParameter>
+     </values>
+    </Effect>
+   </Look>
+   <MediaDesc objName="mediatype" channelIndex="0" streamIndex="-1" outputChannel="-2">
+    <MediaFlags objName="flags" allone="1"/>
+    <MediaType type="0" objName="type"/>
+   </MediaDesc>
+   <MediaGroup objName="media">
+    <groupdata>
+     <MediaInstance_Vector quality="0">
+      <Source objName="media" link="internal" guid="{e530522d-1db8-fd47-9cb8-f0d4111985db}"/>
+     </MediaInstance_Vector>
+    </groupdata>
+   </MediaGroup>
+  </TrackItem>
+  <TrackItem timelineIn="0" matchdescription="" boxSizeWidth="200" sourceDuration="57" name="Prestige_ep008_sc111_face_replacment_sh0030_pl01_comp_v01" enabled="1" guid="{e44dc0d1-ab30-6f41-a0cd-853824ff4a8f}" channelIndex="0" boxSizeHeight="200" streamIndex="-1" resizeType="1" playbackSpeed="1" boxForceShape="0" type="1" resizeCenter="1" boxPAR="1" versionlinked="0" clipSequenceTrackIndex="0" conformScore="0" sourceIn="1" timelineDuration="57" outputChannel="-2">
+   <MediaFlags objName="flags" allone="1"/>
+   <MediaType type="0" objName="type"/>
+   <Look objName="look">
+    <CompositeEffect objName="effects"/>
+    <Effect objName="preprocessed" name="">
+     <values>
+      <EffectParameter source="0">
+       <EnumValue objName="value" name="foundry.effect.blendfunc" value="0" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.valuesource" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="foundry.effect.domainroot" value="" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.enabled" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <FloatValue objName="value" name="foundry.effect.opacity" value="1" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <BooleanValue objName="value" name="foundry.effect.expanded" value="Yes" default="1"/>
+      </EffectParameter>
+      <EffectParameter source="0">
+       <StringValue objName="value" name="colourspacename" value="default" default="1"/>
+      </EffectParameter>
+     </values>
+    </Effect>
+   </Look>
+   <MediaDesc objName="mediatype" channelIndex="0" streamIndex="-1" outputChannel="-2">
+    <MediaFlags objName="flags" allone="1"/>
+    <MediaType type="0" objName="type"/>
+   </MediaDesc>
+   <MediaGroup objName="media">
+    <groupdata>
+     <MediaInstance_Vector quality="0">
+      <Source objName="media" link="internal" guid="{2fdeab30-efe2-5c46-a730-1434efb37937}"/>
+     </MediaInstance_Vector>
+    </groupdata>
+   </MediaGroup>
+   <MediaHashes>
+    <MediaHash hash="bd3d5aa205e8fdebce57c503fd1bfeded3788979eb64600f9541f8a400d143db" frameOffset="0"/>
+   </MediaHashes>
+  </TrackItem>
+ </trackItemCollection>
+ <TrackItemLinkGroups>
+  <TrackItemLinkGroup objName="links" guid="{1c71c7d4-2067-ee40-9507-83cca45677ae}">
+   <trackItems>
+    <TrackItem link="internal" guid="{cf8dcdd0-5c06-ef4d-a338-6950c6ed205f}"/>
+   </trackItems>
+  </TrackItemLinkGroup>
+  <TrackItemLinkGroup objName="links" guid="{42620a1c-feb8-d94f-81b4-3f51a965cf00}">
+   <trackItems>
+    <TrackItem link="internal" guid="{5f8cc897-7683-a942-b95e-82b88554a261}"/>
+   </trackItems>
+  </TrackItemLinkGroup>
+  <TrackItemLinkGroup objName="links" guid="{44a98550-ecbc-1541-8700-3c8116a57573}">
+   <trackItems>
+    <TrackItem link="internal" guid="{02f96ed7-9f91-e048-b7e4-8af2bcedf694}"/>
+   </trackItems>
+  </TrackItemLinkGroup>
+  <TrackItemLinkGroup objName="links" guid="{3d393e40-29f7-d243-a419-03ecb83f8936}">
+   <trackItems>
+    <TrackItem link="internal" guid="{03952027-8688-314f-b8ec-3ec059087bde}"/>
+   </trackItems>
+  </TrackItemLinkGroup>
+ </TrackItemLinkGroups>
+</hieroXML>

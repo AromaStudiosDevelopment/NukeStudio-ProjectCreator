@@ -1,0 +1,2 @@
+[console_scripts]
+hroxgen = hrox_generator.cli:main

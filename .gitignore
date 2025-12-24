@@ -1,0 +1,4 @@
+*.autosave
+.venv
+*.pyc
+__pycache__/
