@@ -1,227 +1,443 @@
-# Deep Guide for an AI Agent: Generate a Python Tool to Produce `.hrox` (hieroXML) Projects
+# guide.md — Nuke Studio (Hiero) PySide2 Plugin
 
-**Purpose:**
-This guide instructs an autonomous AI agent how to design, implement, test, and deliver a production-ready Python tool that programmatically generates Hiero / Nuke Studio read-only project exports (`.hrox`, a `hieroXML` manifest). The document is written so the agent can operate with minimal human supervision and provides step-by-step technical tasks, validation checks, error handling, and a final delivery checklist.
+**Goal:** produce a dockable PySide2 plugin for **Nuke Studio 12 (Python 2.7)** that connects to **CGWire Kitsu** (via **Gazu**) to: log in, let the user choose projects and sequences, fetch each selected sequence’s shots’ Conform `location` (plate path) and Workfile (`.nk`) values, import plates into a **Footage** bin and a new sequence (track `"footage"`), import Nuke scripts into a **Scripts** bin and the same sequence (track `"scripts"`) aligned to the plates.
 
----
-
-## 0 — High-level overview (goal)
-
-Produce a Python package (`hrox-generator`) that:
-
-* Accepts a structured input (JSON/CSV) describing a timeline: media file list, optional Nuke script references, track assignments, timeline positions, and project settings.
-* Computes or validates media durations (frame counts) using `ffprobe` when necessary.
-* Builds a conformant `hieroXML` (`.hrox`) file containing `Media`, `Project`, `trackItemCollection`, and `Sequence` elements with correct GUIDs and attributes.
-* Writes a syntactically valid file including `<?xml ...?>` and `<!DOCTYPE hieroXML>` header and is loadable by Hiero/Nuke Studio.
-
-Deliverables:
-
-* Python source package with CLI and library API.
-* Unit tests for the key generation functions.
-* Example input files and generated `.hrox` sample(s).
-* README and an automated smoke test that opens the produced `.hrox` in a local test environment (manual verification instruction if Hiero/Nuke Studio is not installed).
+> Audience: an AI agent (or developer agent) that will implement the plugin programmatically. The guide is written as explicit tasks, code skeletons, tests and references the key external docs.
 
 ---
 
-## 1 — Capabilities & environment requirements for the agent
+## Table of contents
 
-Agent must:
-
-* Run Python 3.9+.
-* Have `ffprobe` available on PATH (or use a configurable fallback mode).
-* Be able to read local filesystem paths.
-* Install and use Python libraries: `lxml` (preferred) or fallback to `xml.etree.ElementTree`.
-* Use `uuid` for GUID generation.
-* Use subprocess execution (`subprocess`) to call `ffprobe` safely.
-
-Security rules:
-
-* Sanitize file paths and validate file existence before using them.
-* Avoid executing untrusted code; passed Nuke `.nk` file paths are treated as opaque media references only.
+1. Prerequisites & environment
+2. High-level architecture & data flow
+3. Development milestones (epics & tasks)
+4. Detailed implementation plan (per-file, functions, code snippets)
+5. Kitsu (Gazu) data model & how to extract values you need
+6. Hiero / Nuke Studio operations (create bin, import clip, create sequence, add tracks)
+7. UI details (PySide2 cards, dockable panel, threading)
+8. Error handling, edge cases & logging
+9. Testing, validation & sample data
+10. Deployment & installation in Nuke Studio 12 (Python 2.7)
+11. Security notes & credentials handling
+12. Troubleshooting / FAQs
+13. References
 
 ---
 
-## 2 — Input schema (JSON canonical model)
+## 1. Prerequisites & environment
 
-Provide a single canonical JSON schema the agent will accept. Example:
+* **Target product:** Nuke Studio / Hiero 12 (Python 2.7). Use the Hiero API (`hiero.core`, `hiero.ui`) for timeline/clip operations.
+* **Kitsu client:** Gazu Python client (compatible version for your Kitsu instance). Install into the same Python environment that Nuke Studio sees (or vendor into the plugin).
+* **UI toolkit:** PySide2 (available in Nuke 12). Build UI programmatically (widgets will inherit Nuke/Hiero style).
+* **OS:** Windows (UNC paths in examples), ensure Nuke Studio host can reach file servers (e.g. `\\192.168...`).
+* **Access:** Kitsu API URL, username & password (implement username/password login—no token-flow required initially).
 
-```json
-{
-  "project": {
-    "name": "GeneratedProject",
-    "framerate": "25/1",
-    "samplerate": "48000/1",
-    "timecodeStart": 90000,
-    "viewerLut": "ACES/Rec.709",
-    "ocioConfigName": "aces_1.2"
-  },
-  "tracks": [
-    {"name": "Video 1", "kind": "video"},
-    {"name": "VFX 1", "kind": "video"},
-    {"name": "Audio 1", "kind": "audio"}
-  ],
-  "clips": [
-    {"file": "D:/path/clipA.mov", "track": "Video 1", "timelineIn": 0},
-    {"file": "D:/path/clipB.mov", "track": "Video 1", "timelineIn": 100}
-  ]
-}
+**Agent responsibilities before coding**
+
+1. Acquire a test Kitsu project (or a staging instance) and at least one project with shots that have: a Conform task comment containing `location: <UNC or path>`, and tasks with Workfile metadata (`.nk`).
+2. Verify the Nuke Studio development machine has network access to sample footage paths.
+3. Confirm which fields in your Kitsu instance hold the Workfile absolute path (Workfile vs. Working files). If uncertain, inspect using Gazu or raw API queries.
+
+---
+
+## 2. High-level architecture & data flow
+
+1. **UI layer (PySide2):** Login widget → Project combobox → Sequence cards (sequence name, tasks combobox, checkbox) → Load button.
+2. **Controller:** On login → fetch projects. On project select → fetch sequences and tasks (populate cards). On Load → collect selected sequences, send them to the loader.
+3. **Loader (worker thread):** For each selected sequence:
+
+   * Query shots → for each shot: get Conform task comment → parse `location` → import clip to Footage bin.
+   * Build sequence timeline: create a new sequence, create `"footage"` and `"scripts"` tracks, create track items for plates and scripts aligned in time.
+4. **Persistence & UI feedback:** progress bar, logs, and errors reported back to UI thread.
+
+Diagram (conceptual):
+
+```
+[PySide2 UI] -> [Controller] -> [Gazu API] & [Hiero API]  -> Nuke Studio timeline + clips/bins
 ```
 
-Agent must validate this schema and report missing/invalid fields.
+---
+
+## 3. Development milestones (epics & tasks)
+
+**Epic A — Setup & skeleton**
+
+* A1: Create repo, plugin dir structure
+* A2: Ensure Gazu & PySide2 importable in Nuke Studio Python 2.7
+* A3: Add logging & config file (`plugin_config.json`)
+
+**Epic B — Authentication & discover**
+
+* B1: Implement Login widget + Gazu authentication
+* B2: Fetch projects & populate Project combobox
+* B3: Fetch sequences for project & tasks per sequence
+
+**Epic C — UI: sequence cards**
+
+* C1: Build sequence card widget with label, task combobox, checkbox
+* C2: Add list container & scroll area, implement select-all
+
+**Epic D — Loader core**
+
+* D1: Implement shot enumeration for sequence
+* D2: Implement Conform comment parser to extract `location`
+* D3: Implement clip import to Footage bin (createClip or matching API)
+* D4: Implement sequence creation and track population with plate track
+* D5: Implement Workfile retrieval, scripts bin and script import/alignment
+
+**Epic E — Polishing**
+
+* E1: Progress UI & cancellation support
+* E2: Error handling & user messages
+* E3: Unit/integration tests and sample dataset
+* E4: Packaging + installation instructions
 
 ---
 
-## 3 — Core implementation tasks (step-by-step)
+## 4. Detailed implementation plan (per-file, functions, code snippets)
 
-### 3.1 Project bootstrap
+**Repository layout (suggested)**
 
-* Create a Python package skeleton: `hrox_generator/`, `hrox_generator/__init__.py`, `cli.py`, `generator.py`, `schema.py`, `tests/`, `examples/`.
-* Add `pyproject.toml` or `setup.cfg` for packaging and dependencies (`lxml` optional).
-
-### 3.2 Input parsing & validation
-
-* Implement a `schema.py` that validates input JSON via either a small custom validator or `jsonschema`.
-* Normalize framerate (e.g., accept `25` or `25/1`) into numerator/denominator integers.
-* Normalize paths (resolve symlinks, expanduser); ensure files exist.
-
-### 3.3 Media metadata extraction
-
-* Implement `get_framecount(path)`:
-  * Primary method: call `ffprobe -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of default=nokey=1:noprint_wrappers=1 <file>` and parse the integer.
-  * Fallback: `ffprobe``duration` and `avg_frame_rate` to estimate frames (round to nearest int).
-  * If `ffprobe` fails and the user provided `sourceDuration` in the input, use that.
-  * Log warnings for estimated vs counted values.
-* Return integer framecounts or `None` if unavailable.
-
-### 3.4 GUID management
-
-* Implement `gen_guid()` using `uuid.uuid4()` and format with braces: `{xxxxxxxx-xxxx-...}`.
-* Build mapping dictionaries for `source_path -> source_guid` and `clip_id -> trackitem_guid`.
-
-### 3.5 XML model construction
-
-* Use `lxml.etree` (preferred): it supports DOCTYPE, pretty printing, and namespaces.
-* Minimal required XML nodes:
-  * Root: `<hieroXML name="NukeStudio" version="11" release="12.2v2">` (set `version`/`release` to the target app version).
-  * `<Media>` with `<Source file="..." name="..." guid="{...}" duration="..."/>` for each media.
-  * `<Project ...>` with attributes from input.
-  * `<trackItemCollection>` with `<TrackItem ...>` for each clip, including nested `<MediaGroup>` -> `<groupdata>` -> `<MediaInstance_Vector>` -> `<Source guid="{...}"/>` links.
-  * `<Sequence>` -> `<videotracks>` -> multiple `<VideoTrack>` elements -> `<trackItems>` referencing TrackItem GUIDs.
-
-### 3.6 DOCTYPE and file write
-
-* Use `lxml.etree.tostring(root, pretty_print=True, xml_declaration=True, encoding='UTF-8', doctype='<!DOCTYPE hieroXML>')` to produce the header + DOCTYPE in a single pass.
-* If `lxml` is not available, use `xml.etree.ElementTree` to produce the XML body, then write header + DOCTYPE manually before the body (see tests and examples).
-
-### 3.7 CLI and API
-
-* `cli.py` should accept:
-  * `--input <json>`
-  * `--output <file.hrox>`
-  * `--ffprobe-path <path>` optional
-  * `--use-relative-paths` flag
-  * `--dry-run` modes
-* Expose a library function `generator.generate_hrox(input_object, out_path, options)`.
-
----
-
-## 4 — Edge cases, validations, and robustness
-
-* **Missing files:** Create placeholder `Source` entries but mark their file attribute as `MISSING:<path>` and warn. Do not crash unless `--strict` is set.
-* **Frame mismatch:** If a clip's `sourceDuration` is shorter than the timeline slot, produce a `WARNING` and optionally clip the timelineDuration.
-* **Path portability:** Provide `--path-base` option to convert absolute paths to relative ones by substituting a root path.
-* **Version compatibility:** Expose `--target-release` parameter so generated `release` attribute can match the target Hiero/Nuke Studio release.
-
----
-
-## 5 — Testing & QA plan
-
-### Unit tests
-
-* Test GUID format generator: ensure unique & braced.
-* Test ffprobe wrapper: use small test video files (or mocked subprocess) to return expected framecounts.
-* Test XML generation: feed a minimal JSON and compare generated XML tree structure (parse back with `lxml` and assert expected elements and attributes).
-
-### Integration tests
-
-* Produce a `.hrox` from `examples/example_project.json` and include the sample media (or symlink placeholders). Attempt to open the file in a local Hiero/Nuke Studio installation (manual) and confirm:
-  * Tracks exist with expected names.
-  * Clips map to correct media by path.
-  * Timecode and framerate are correct.
-
-### Smoke tests for DOCTYPE handling
-
-* Test both `lxml` and the manual `ElementTree + manual doctype` flows to ensure both output a well-formed `.hrox` that Hiero accepts.
-
----
-
-## 6 — Logging, observability, and error reporting
-
-* Use `logging` with levels: DEBUG / INFO / WARNING / ERROR.
-* Create a JSON `--report <file.json>` option that writes a manifest of actions, chosen frame counts, and any warnings (useful for later debugging).
-
----
-
-## 7 — Example prompts for the AI agent (to create code & tests)
-
-Use the following prompts as tasks assigned to the agent sequentially.
-
-### Prompt A — Implement ffprobe wrapper
-
-> Implement a function `get_framecount(path: str, ffprobe_path: Optional[str]=None) -> Optional[int]`. Use `subprocess` to call `ffprobe -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of default=nokey=1:noprint_wrappers=1 <path>`. Parse output and return integer. If ffprobe fails, fall back to using `duration` and `avg_frame_rate`. Write unit tests mocking subprocess.
-
-### Prompt B — Build XML skeleton
-
-> Implement `build_hiero_tree(input_obj: dict) -> lxml.etree._ElementTree` that returns an `lxml` ElementTree for the full `hieroXML` structure described in this guide. The function must not write to disk. Create unit tests that assert presence of `Media`, `Project`, `trackItemCollection`, and `Sequence` nodes.
-
-### Prompt C — Write file safely
-
-> Implement `write_hrox(tree, outpath)` that writes the tree to disk with `<!DOCTYPE hieroXML>` using `lxml`. Provide fallback logic if `lxml` is not installed (write header manually + ElementTree serialization).
-
-### Prompt D — CLI & packaging
-
-> Create `cli.py` and `pyproject.toml` that expose the package as a console script `hroxgen`. Add documentation in README describing usage.
-
----
-
-## 8 — Example minimal test case (JSON input)
-
-```json
-{
-  "project": {
-    "name": "GeneratedProject",
-    "framerate": "25/1",
-    "samplerate": "48000/1",
-    "timecodeStart": 90000
-  },
-  "tracks": [ {"name": "Video 1", "kind":"video"} ],
-  "clips": [ {"file": "examples/media/clipA.mov", "track": "Video 1"} ]
-}
+```
+nuke_kitsu_loader/
+├─ plugin.py                # entry: register panel with Nuke/Hiero
+├─ ui/
+│  ├─ login_widget.py
+│  ├─ main_widget.py
+│  └─ sequence_card.py
+├─ core/
+│  ├─ kitsu_client.py       # wrapper around gazu calls
+│  ├─ loader.py             # background worker to import clips/scripts
+│  └─ utils.py              # parsing helpers, path utilities
+├─ tests/
+└─ README.md
 ```
 
-Expected results:
+### plugin.py
 
-* A file `GeneratedProject.hrox` containing one `Source` for `clipA.mov` and one `TrackItem` referencing it, placed at `timelineIn = 0`.
+* Register panel as dockable widget (use Nuke or Hiero registration API depending on environment).
 
----
+```python
+# plugin.py (simplified)
+from PySide2 import QtWidgets
+# Import the UI class you'll implement
+from ui.main_widget import KitsuLoaderMainWidget
 
-## 9 — Deliverable checklist for final verification
+def create_panel():
+    return KitsuLoaderMainWidget()
 
-* [ ]  `hroxgen` CLI that consumes JSON and produces `.hrox`.
-* [ ]  `generator.generate_hrox()` library API with documented parameters.
-* [ ]  Unit tests covering GUID creation, ffprobe wrapper, XML generation.
-* [ ]  Example inputs and generated `.hrox` files checked manually in Hiero/Nuke Studio.
-* [ ]  README.md with instructions, usage examples, and troubleshooting.
-* [ ]  JSON report output of last run containing warnings and metadata.
+# Registration code differs between Nuke and Hiero; place this file in the startup path for the host.
+```
 
----
-
-## 10 — Handoff and maintenance notes
-
-* Keep the `--target-release` value explicit; if Hiero/Nuke Studio updates change XML structure or required attributes, update templates in `templates/` and add regression tests.
-* If the studio uses a custom OCIO / Look system, populate `Project` viewerLut and `ocioConfigName` from configuration templates.
-* Document known limitations (e.g., this tool does not validate Nuke script internals; it treats them as referenced assets only).
+**Note:** For Nuke Studio / Hiero, place the script in the appropriate startup folder and use the host's recommended registration API.
 
 ---
 
-*End of guide.*
+### ui/login_widget.py
+
+* Contains `QLineEdit` for API URL, username, password, and a `Login` button. On click:
+
+  * call `kitsu_client.login(host, user, pass)` wrapper.
+* On success emit `login_successful` (Qt signal) with user info.
+
+```python
+# login_widget.py (concept)
+from PySide2.QtWidgets import QWidget, QLineEdit, QPushButton, QVBoxLayout
+
+class LoginWidget(QWidget):
+    def __init__(self, parent=None):
+        super(LoginWidget, self).__init__(parent)
+        # fields: api_url, username, password
+        # bind login button -> self._do_login()
+    def _do_login(self):
+        # call kitsu_client.login(host, username, password)
+        pass
+```
+
+---
+
+### core/kitsu_client.py
+
+* Provide a thin wrapper to isolate Gazu usage: `login(host, user, pass)`, `get_projects()`, `get_sequences(project)`, `get_shots(sequence)`, `get_tasks_for_sequence(sequence)`, `get_latest_task_comment(task_name, shot)`, `get_workfile_for_shot(task, shot)`, and `raw_request()` fallback if needed.
+
+Key functions (pseudo):
+
+```python
+def login(host, username, password):
+    # configure client host and log in
+    pass
+
+def get_projects():
+    # return list of projects
+    pass
+```
+
+**Important:** Kitsu instances vary; confirm where Workfile paths are stored and implement fallbacks using raw API queries if necessary.
+
+---
+
+### core/utils.py — Conform comment parser
+
+* Conform comments typically include a line like `location: \\server\path\...` — implement a robust parser:
+
+  * Accept tokens `location:`, `Location:`, `path:`
+  * Extract UNC or local path including spaces
+  * Validate that path exists (optional: `os.path.exists` from the host where Nuke runs)
+  * If the comment contains multiple locations, pick the one that points to a valid media file or folder.
+
+Example parser:
+
+```python
+import re
+
+def extract_location_from_comment(comment_text):
+    m = re.search(r'location\s*:\s*(.+)', comment_text, re.I)
+    if m:
+        p = m.group(1).strip()
+        p = p.rstrip(' .;')
+        return p
+    return None
+```
+
+---
+
+### core/loader.py — worker responsibilities
+
+**Goal:** perform all heavy operations off the UI thread. Use `QThread` or `QRunnable` (PySide2) to avoid blocking the UI.
+
+Steps for each selected sequence:
+
+1. `shots = kitsu_client.get_shots(sequence)`
+2. For each shot:
+
+   * `conform_comment = kitsu_client.get_latest_task_comment(shot, "Conform")`
+   * `location = utils.extract_location_from_comment(conform_comment)`
+   * Validate `location` points to media (file / image sequence)
+   * `clip = create_clip_in_footage_bin(location)` → using Hiero API
+   * Keep ordered list `[(shot_name, clip, script_path_or_None), ...]`
+3. Create new `Sequence` in project
+4. Create `footage` track and push track items for each clip preserving shot order
+5. For each shot, attempt to fetch Workfile and import into `Scripts` bin and `scripts` track aligned to the clip duration
+
+**Important Hiero API calls:** Use `project.clipsBin()` or `hiero.core.Bin` and `bin.createClip(path)` to import media.
+
+---
+
+## 5. Kitsu (Gazu) data model & extraction tips
+
+* **Hierarchy:** Projects → Sequences → Shots → Tasks → Comments / Working files.
+* **Conform location:** many studios put the plate path in the latest comment on the Conform task. Implement comment scanning and `location:` extraction.
+* **Workfile (`.nk`):** may be stored as a Working File or an uploaded file on the task. Implement logic to find the latest `.nk` in working files; if absent, provide fallback behavior.
+
+**Fallback strategy:**
+
+1. Try high-level helper to get the main working file for the chosen task.
+2. If not present, list working files and pick the latest `.nk` by name or type.
+3. If still not found, log and continue (import plates only).
+
+---
+
+## 6. Hiero / Nuke Studio operations (create bin, import clip, create sequence, add tracks)
+
+**Essential operations (pseudo-code):**
+
+* **Create / find bin**
+
+```python
+project_bin = project.clipsBin()
+footage_bin = hiero.core.Bin("Footage")
+project_bin.addItem(footage_bin)
+```
+
+* **Import clip**
+
+```python
+clip = footage_bin.createClip(path_to_media)
+```
+
+* **Create sequence**
+
+```python
+sequence = hiero.core.Sequence(sequence_name)
+bin_item = hiero.core.BinItem(sequence)
+project_bin.addItem(bin_item)
+```
+
+* **Add video tracks**
+
+```python
+from hiero.core import VideoTrack
+footage_track = VideoTrack("footage")
+sequence.addTrack(footage_track)
+scripts_track = VideoTrack("scripts")
+sequence.addTrack(scripts_track)
+```
+
+* **Create track items aligned to clip**
+
+```python
+track_item = footage_track.createTrackItem(clip.name())
+track_item.setSource(clip)
+footage_track.addItem(track_item)
+```
+
+**Notes:** If Nuke Studio does not accept `.nk` files as timeline clips, implement a proxy strategy (attach `.nk` as metadata and/or create a small preview clip to represent the script on the timeline).
+
+---
+
+## 7. UI details (PySide2 cards, dockable panel, threading)
+
+**Sequence card widget**
+
+* Horizontal layout with:
+
+  * `QLabel`: sequence name
+  * `QComboBox`: tasks for sequence
+  * `QCheckBox`: include
+* Provide right-click context menu: "Select all shots", "Expand/Collapse".
+
+**Dockable registration**
+
+* Use the host's recommended API to register a dockable PySide widget. Place `plugin.py` in the correct startup path.
+
+**Threading**
+
+* Use `QThread` or `QThreadPool` to run loader operations asynchronously. Communicate progress via Qt signals and support cancellation by checking a cancel flag in the worker.
+
+---
+
+## 8. Error handling, edge cases & logging
+
+* **Missing Conform comment** → log & show warning for that shot, continue to next shot.
+* **Invalid/missing Workfile** → import plates only and log details.
+* **Network path not reachable** → detect with `os.path.exists` (runs on Nuke host). If unreachable, attempt to map or prompt user.
+* **Script import limitations** → if `.nk` cannot be imported, attach path as metadata and provide an "Open script" action to launch Nuke with that script.
+
+**Logging:** write to both the host log and an on-disk rolling log for debugging (e.g. `logs/kitsu_loader.log`). Include timestamps and severity.
+
+---
+
+## 9. Testing, validation & sample data
+
+**Unit tests:**
+
+* `utils.extract_location_from_comment()` with varied comment formats.
+* `kitsu_client` wrappers with mocked responses.
+
+**Integration tests (manual):**
+
+* Use a Kitsu staging project with: Conform comments and Workfiles present. Validate that:
+
+  * Clips appear in `Footage` bin.
+  * Sequence created and `footage` track contains clips in the correct order.
+  * `scripts` track contains script proxies aligned with plates.
+
+**Acceptance criteria:**
+
+* With at least one selected sequence, the plugin creates a sequence with two tracks (`footage` & `scripts`), imports clips, aligns items, and produces no unhandled exceptions.
+
+---
+
+## 10. Deployment & installation in Nuke Studio 12 (Python 2.7)
+
+1. Place plugin folder under the host startup path (e.g. `~/.nuke/` or Hiero startup path).
+2. Ensure `gazu` is available to Nuke’s Python runtime: either vendor the package or install it into the same Python environment used by Nuke.
+3. Add a startup script (`plugin.py`) that registers the panel/menu and initializes the plugin.
+4. Restart Nuke Studio and confirm the panel appears.
+
+---
+
+## 11. Security notes & credentials handling
+
+* **Do not hardcode credentials.** Keep them in memory only at runtime.
+* Optionally, support secure local storage (OS credential manager) if persistent login is required.
+* Prefer `https` endpoints for Kitsu and validate certificates when possible.
+
+---
+
+## 12. Troubleshooting / FAQs
+
+**Q: Conform comment contains multiple location lines or file list.**
+
+* A: Choose the last (most recent) `location:` or the one that points to an existing path. Provide UI override if needed.
+
+**Q: NK scripts do not import into Nuke Studio timeline.**
+
+* A: Implement a proxy strategy: import a preview clip and attach `.nk` as metadata, or provide an "Open script" direct action.
+
+**Q: UI hangs during long import.**
+
+* A: Ensure all import operations run in a background `QThread` and report progress via Qt signals.
+
+---
+
+## 13. References
+
+* Gazu (Kitsu Python client) documentation and examples.
+* Foundry Hiero / Nuke Studio Python developer guides and `hiero.core` examples.
+* Foundry documentation and community examples for creating dockable PySide widgets in Nuke/Hiero.
+
+---
+
+## Appendix — Helpful code snippets (adapted for Python 2.7 / PySide2)
+
+**QThread skeleton (PySide2 / Python 2.7):**
+
+```python
+from PySide2.QtCore import QThread, Signal
+
+class LoaderThread(QThread):
+    progress = Signal(int)
+    message = Signal(str)
+    finished = Signal()
+
+    def __init__(self, tasks, parent=None):
+        super(LoaderThread, self).__init__(parent)
+        self.tasks = tasks
+        self._cancel = False
+
+    def run(self):
+        for i, t in enumerate(self.tasks):
+            if self._cancel:
+                break
+            self.message.emit("Processing %s" % t.name)
+            # perform import steps ...
+            self.progress.emit(int((i+1)/float(len(self.tasks))*100))
+        self.finished.emit()
+
+    def cancel(self):
+        self._cancel = True
+```
+
+**Conform comment parser example**
+
+```python
+import re
+
+def extract_location(comment_text):
+    if not comment_text:
+        return None
+    m = re.search(r'location\s*:\s*([\\\\A-Za-z0-9_:/.\-\\ ]+)', comment_text, re.I)
+    return m.group(1).strip() if m else None
+```
+
+---
+
+## Next actions for the AI agent (immediate checklist)
+
+1. **Validate environment**: confirm `gazu` importability from Nuke Studio Python 2.7; if not, vendor `gazu` package.
+2. **Create small prototype**: implement minimal login UI and list projects.
+3. **Create a Hiero smoke test**: from Nuke Studio Python REPL, run a small `create_example` snippet to create a dummy sequence and verify in UI.
+4. **Implement parser & loader skeleton**: test parsing of real Conform comments and test importing a single clip into a `Footage` bin.
+5. **Iterate**: add script import logic and alignment, polish UI, add progress & logging.
+
+---
+
+## Final notes / assumptions & caveats
+
+* **Assumption:** Conform `location` follows `location: <path>` convention in comments. If studio workflow differs, the agent must inspect sample comments and adapt the parser.
+* **Caveat:** Importing `.nk` files into Nuke Studio timeline can be environment-specific. If direct import isn't supported, implement a proxy workflow (thumbnail or metadata attachment) and test early.
+
+---
+
+*End of document.*
