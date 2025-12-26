@@ -1,0 +1,10 @@
+{
+  "kitsu_host": "https://192.168.150.179/api",
+  "nuke_executable": "C:\\Program Files\\Nuke12.2v2\\Nuke12.2.exe",
+  "path_mappings": [
+    {
+      "match": "\\\\192.168.150.179\\share2\\storage2\\Projects",
+      "replace": "X:\\storage2\\Projects"
+    }
+  ]
+}
