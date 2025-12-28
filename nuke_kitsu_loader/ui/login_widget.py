@@ -31,6 +31,15 @@ class LoginWidget(QtWidgets.QWidget):
         self._build_layout()
         self._login_button.clicked.connect(self._attempt_login)
 
+        default_host = kitsu_client.get_default_host() or ''
+        if default_host:
+            self._host.setText(default_host)
+            self._host.setReadOnly(True)
+            self._host.setToolTip('Update configs/plugin_config.json to change the Kitsu host')
+        else:
+            self._host.setPlaceholderText('Set kitsu_host in configs/plugin_config.json')
+            self._host.setReadOnly(True)
+
     def _build_layout(self):
         layout = QtWidgets.QFormLayout(self)
         layout.addRow('Kitsu Host', self._host)
@@ -44,9 +53,15 @@ class LoginWidget(QtWidgets.QWidget):
 
     def _attempt_login(self):
         self._set_busy(True)
-        host = self._host.text().strip()
+        host = kitsu_client.get_default_host()
         username = self._username.text().strip()
         password = self._password.text().strip()
+        if not host:
+            message = 'kitsu_host is not configured. Edit configs/plugin_config.json.'
+            self._status.setText(message)
+            self.login_failed.emit(unicode(message))
+            self._set_busy(False)
+            return
         ok, payload = kitsu_client.login(host, username, password)
         self._set_busy(False)
         if ok:

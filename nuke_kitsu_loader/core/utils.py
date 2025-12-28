@@ -14,10 +14,31 @@ def extract_location_from_comment(text):
     """Extract a media path from a conform comment."""
     if not text:
         return None
-    match = LOCATION_PATTERN.search(text)
-    if not match:
+    normalized = text.replace('\r', '')
+    for line in normalized.split('\n'):
+        match = LOCATION_PATTERN.search(line)
+        if not match:
+            continue
+        candidate = _clean_location_candidate(match.group(1))
+        if candidate:
+            return candidate
+    match = LOCATION_PATTERN.search(normalized)
+    if match:
+        return _clean_location_candidate(match.group(1))
+    return None
+
+
+def _clean_location_candidate(value):
+    """Normalize markdown/table formatted location entries."""
+    if not value:
         return None
-    candidate = match.group(1).strip()
+    candidate = value.strip()
+    candidate = candidate.strip('|').strip()
+    if '|' in candidate:
+        candidate = candidate.split('|', 1)[0].strip()
+    if candidate.startswith('`') and candidate.endswith('`'):
+        candidate = candidate[1:-1].strip()
+    candidate = candidate.strip('`" ')
     candidate = candidate.rstrip(' ;.,')
     return candidate or None
 

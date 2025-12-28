@@ -12,6 +12,8 @@ try:
 except ImportError:  # pragma: no cover - gazu not vendorized yet
     gazu = None
 
+from nuke_kitsu_loader.core.cert_utils import configure_kitsu_ca_bundle
+
 LOGGER = logging.getLogger(__name__)
 
 _CONFIG = None
@@ -57,6 +59,10 @@ def login(host, username, password):
     ok, error = _gazu_available()
     if not ok:
         return False, error
+    host = host or get_default_host()
+    if not host:
+        return False, 'Kitsu host is not configured. Update configs/plugin_config.json.'
+    configure_kitsu_ca_bundle(host)
     try:
         gazu.set_host(host)
         user = gazu.log_in(username, password)
@@ -111,7 +117,16 @@ def get_sequences(project_id):
         return False, error
     try:
         project = gazu.project.get_project(project_id)
-        sequences = gazu.shot.all_sequences(project)
+        shot_module = getattr(gazu, 'shot', None)
+        if shot_module is None:
+            raise AttributeError('gazu.shot module unavailable')
+        fetch_sequences = getattr(shot_module, 'all_sequences_for_project', None)
+        if fetch_sequences is None:
+            # legacy fallback for older releases
+            fetch_sequences = getattr(shot_module, 'all_sequences', None)
+        if fetch_sequences is None:
+            raise AttributeError('Gazu API does not expose all_sequences_for_project/all_sequences')
+        sequences = fetch_sequences(project)
     except Exception as exc:  # pragma: no cover
         LOGGER.exception('Failed to fetch sequences for %s: %s', project_id, exc)
         return False, str(exc)
@@ -186,7 +201,7 @@ def get_latest_conform_comment(shot_id):
     conform_tasks = []
     for task in tasks:
         task_type = task.get('task_type') or {}
-        if (task_type.get('name') or '').lower() == 'conform':
+        if (task_type.get('name') or '').lower() == 'conforming':
             conform_tasks.append(task)
     if not conform_tasks:
         return True, None
@@ -264,3 +279,9 @@ def _latest_workfile_from_task(task):
     workfiles = sorted(workfiles, key=lambda item: item.get('updated_at') or item.get('created_at') or '')
     latest = workfiles[-1]
     return latest.get('file_path') or latest.get('path') or latest.get('full_path')
+
+
+def get_default_host():
+    """Expose configured host for UI defaults and fallbacks."""
+    config = _load_config()
+    return config.get('kitsu_host')

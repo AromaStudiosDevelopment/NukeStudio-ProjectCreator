@@ -60,7 +60,7 @@ class KitsuClientTests(unittest.TestCase):
         self._orig_config = kitsu_client._CONFIG  # pylint: disable=protected-access
         self._tasks_map = {
             'shot-1': [
-                {'id': 'task-10', 'task_type': {'name': 'Conform'}},
+                {'id': 'task-10', 'task_type': {'name': 'Conforming'}},
                 {'id': 'task-20', 'task_type': {'name': 'Compositing'}},
             ],
             'shot-2': [

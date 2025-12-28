@@ -38,7 +38,7 @@ If a future environment deviates (missing `gazu`, inaccessible UNC path, etc.), 
 
 1. Copy `nuke_kitsu_loader` into your Nuke/Hiero startup path (e.g. `%USERPROFILE%\.nuke`).
 2. Edit `configs/plugin_config.json` to point at your Kitsu host and path mappings.
-3. Launch Nuke Studio, open the *Kitsu Loader* panel, enter your credentials, and confirm that the project list populates.
+3. Launch Nuke Studio, trigger *Custom → Kitsu Loader* (or the menu path you registered), enter your credentials, and confirm that the project list populates.
 4. Right-click a script-track item (or use the Timeline menu) to run **Open Script Workfile**, which launches the `.nk` stored on that item.
 5. Continue implementing later phases following `guide.md`.
 
@@ -48,16 +48,17 @@ If a future environment deviates (missing `gazu`, inaccessible UNC path, etc.), 
 2. Clone or copy this repository somewhere accessible to the workstation running Nuke Studio/Hiero.
 3. Copy (or symlink) the `nuke_kitsu_loader` folder into your Nuke/Hiero startup directory (for example `%USERPROFILE%\.nuke\Python\Startup` on Windows).
 4. Add the following line to `init.py` or `menu.py` inside the startup directory so the panel registers automatically:
+4. Add the following snippet to `init.py` or `menu.py` inside the startup directory so a custom menu command launches the windowed UI:
 	```python
-	import nuke_kitsu_loader.plugin
-	nuke_kitsu_loader.plugin.register_panel()
+	from nuke_kitsu_loader import plugin
+	plugin.register_script_menu('Custom/Kitsu Loader')
 	```
 5. Edit `nuke_kitsu_loader/configs/plugin_config.json` to set `kitsu_host`, `path_mappings`, and (optionally) `nuke_executable`.
-6. Restart Nuke Studio/Hiero and open *Workspace → Panels → Kitsu Loader* to verify the dockable UI loads without errors.
+6. Restart Nuke Studio/Hiero and use *Custom → Kitsu Loader* from the main menu (or *Workspace → Panels → Kitsu Loader* if you also call `plugin.register_panel()`) to verify the UI launches without errors.
 
 ## User guide
 
-1. **Login** – In the loader panel, enter the Kitsu API URL, username, and password, then press **Login**. The status label will update to show the authenticated user.
+1. **Open & login** – Launch the tool via *Custom → Kitsu Loader* (or your chosen menu path), enter the Kitsu API URL, username, and password, then press **Login**. The status label updates to show the authenticated user.
 2. **Select project** – Choose a project from the combobox. The plugin fetches all sequences for that project and displays them as selectable cards with per-sequence task dropdowns.
 3. **Choose tasks/sequences** – For each sequence card you want to process, ensure the checkbox is enabled and pick the downstream task whose workfiles (.nk) you want fetched (e.g., `Compositing`).
 4. **Run loader** – Click **Load Selected Sequences**. Progress updates and log messages appear in the lower log widget. The loader imports plates into a Footage bin, builds a new sequence with `footage` and `scripts` tracks, and attaches workfile metadata.
