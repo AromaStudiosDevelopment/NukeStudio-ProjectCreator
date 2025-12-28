@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from PySide2 import QtCore, QtWidgets  # pylint: disable=import-error
 
-from nuke_kitsu_loader.core import kitsu_client
+from nuke_kitsu_loader.core import debug, kitsu_client
 from nuke_kitsu_loader.core.loader import LoaderThread
 from nuke_kitsu_loader.ui.login_widget import LoginWidget
 from nuke_kitsu_loader.ui.sequence_card import SequenceCard
@@ -40,6 +40,7 @@ class KitsuLoaderMainWidget(QtWidgets.QWidget):
 
         self._build_layout()
         self._connect_signals()
+        self._announce_log_location()
 
     def _build_layout(self):
         layout = QtWidgets.QVBoxLayout(self)
@@ -78,6 +79,11 @@ class KitsuLoaderMainWidget(QtWidgets.QWidget):
 
     def _append_log(self, message):
         self._log_output.append(unicode(message))
+
+    def _announce_log_location(self):
+        log_path = debug.current_log_file()
+        if log_path:
+            self._append_log('Debug log file: %s' % log_path)
 
     def _on_project_changed(self, index):
         project = self._project_combo.itemData(index)

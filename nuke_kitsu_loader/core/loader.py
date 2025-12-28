@@ -8,7 +8,7 @@ import os
 
 from PySide2 import QtCore  # pylint: disable=import-error
 
-from nuke_kitsu_loader.core import kitsu_client, utils
+from nuke_kitsu_loader.core import debug, kitsu_client, utils
 
 try:  # pragma: no cover - Hiero only exists inside Nuke Studio
     import hiero.core
@@ -50,13 +50,29 @@ class LoaderThread(QtCore.QThread):
             'errors': [],
             'processed_shots': 0,
         }
-        if not self._sequences:
+        try:
+            self._process_sequences(summary)
+        except Exception:  # pragma: no cover - unexpected failure
+            crash_details = debug.record_exception('LoaderThread.run')
+            message = 'Loader thread crashed; see log %s' % (crash_details.get('log_file') or 'unknown')
+            summary['errors'].append(self._emit_error('UNHANDLED_EXCEPTION', message))
+            summary['crash'] = crash_details
+        finally:
+            summary['processed_shots'] = self._processed_shots
+            summary['log_file'] = debug.current_log_file()
+            summary_path = debug.write_run_summary(summary)
+            if summary_path:
+                summary['summary_file'] = summary_path
+                self.message.emit('Run summary saved to %s' % summary_path)
             self.completed.emit(summary)
+
+    def _process_sequences(self, summary):
+        if not self._sequences:
+            self.message.emit('No sequences selected for loading')
             return
         plans, prep_errors = self._prepare_sequence_plans()
         summary['errors'].extend(prep_errors)
         if not plans:
-            self.completed.emit(summary)
             return
         self._total_shots = sum(len(plan['shots']) for plan in plans) or 1
         for plan in plans:
@@ -66,8 +82,6 @@ class LoaderThread(QtCore.QThread):
             sequence_summary = self._process_sequence_plan(plan)
             summary['sequences'].append(sequence_summary)
             summary['errors'].extend(sequence_summary['errors'])
-        summary['processed_shots'] = self._processed_shots
-        self.completed.emit(summary)
 
     def _emit_error(self, code, message, shot=None, sequence_name=None):
         payload = {
@@ -83,33 +97,95 @@ class LoaderThread(QtCore.QThread):
     def _import_clip_to_footage_bin(self, media_path):
         if hiero is None:
             return False, 'Hiero API is not available outside Nuke Studio.'
-        projects = hiero.core.projects()
-        if not projects:
-            return False, 'No open Hiero project to import into.'
-        project = projects[-1]
-        self._project = project
+        project = self._get_active_project()
+        if project is None:
+            try:
+                project = hiero.core.newProject()
+                self._project = project
+            except Exception as exc:  # pragma: no cover - depends on Hiero environment
+                LOGGER.exception('Failed to create Hiero project: %s', exc)
+                return False, 'Unable to create Hiero project: %s' % exc
+        normalized_path = self._normalize_hiero_path(media_path)
         root_bin = project.clipsBin()
         footage_bin = self._find_or_create_bin(root_bin, 'Footage')
         try:
-            clip = footage_bin.createClip(media_path)
+            imported_result = footage_bin.importFolder(normalized_path)
+            LOGGER.debug('Import completed for: %s', normalized_path)
         except Exception as exc:  # pragma: no cover - depends on Hiero environment
-            LOGGER.exception('Failed to import %s: %s', media_path, exc)
+            LOGGER.exception('Failed to import %s: %s', normalized_path, exc)
             return False, str(exc)
-        return True, {'clip': clip, 'bin': footage_bin, 'project': project}
+        clip = self._resolve_imported_clip(footage_bin, imported_result)
+        if clip is None:
+            return False, 'No sequence or clip found in %s after import.' % normalized_path
+        return True, {
+            'clip': clip,
+            'bin': footage_bin,
+            'project': project,
+            'path': normalized_path,
+        }
 
     def _find_or_create_bin(self, root_bin, name):
         existing = self._find_bin_by_name(root_bin, name)
-        if existing:
+        if existing is not None:
             return existing
         new_bin = hiero.core.Bin(name)
-        root_bin.addItem(hiero.core.BinItem(new_bin))
+        try:
+            root_bin.addItem(new_bin)
+        except Exception:
+            root_bin.addItem(hiero.core.BinItem(new_bin))
         return new_bin
 
     def _find_bin_by_name(self, root_bin, name):
-        for item in root_bin.items():
+        items = getattr(root_bin, 'items', None)
+        if not callable(items):
+            return None
+        for item in items():
+            if isinstance(item, hiero.core.Bin) and item.name() == name:
+                return item
             active = item.activeItem() if hasattr(item, 'activeItem') else None
             if isinstance(active, hiero.core.Bin) and active.name() == name:
                 return active
+        return None
+
+    def _normalize_hiero_path(self, path_value):
+        normalized = os.path.normpath(path_value)
+        if hiero is not None:
+            try:
+                normalized = hiero.core.remapPath(normalized)
+            except Exception:  # pragma: no cover
+                pass
+        return normalized
+
+    def _resolve_imported_clip(self, footage_bin, imported_result):
+        clip = self._pick_first_source(imported_result)
+        if clip is not None:
+            return clip
+        clip = self._pick_first_source(footage_bin)
+        return clip
+
+    def _pick_first_source(self, container):
+        if container is None:
+            return None
+        sequences = getattr(container, 'sequences', None)
+        if callable(sequences):
+            seq_items = sequences()
+            if seq_items:
+                seq_item = seq_items[0]
+                if hasattr(seq_item, 'activeItem'):
+                    try:
+                        return seq_item.activeItem()
+                    except Exception:
+                        pass
+        clips = getattr(container, 'clips', None)
+        if callable(clips):
+            clip_items = clips()
+            if clip_items:
+                clip_item = clip_items[0]
+                if hasattr(clip_item, 'activeItem'):
+                    try:
+                        return clip_item.activeItem()
+                    except Exception:
+                        pass
         return None
 
     def _prepare_sequence_plans(self):
@@ -244,7 +320,7 @@ class LoaderThread(QtCore.QThread):
                 track_item.setTimelineIn(timeline_in)
                 track_item.setTimelineOut(timeline_in + duration)
                 footage_track.addItem(track_item)
-                self._add_script_track_item(scripts_track, clip, entry, timeline_in, timeline_in + duration)
+                self._add_script_track_item(sequence_name, scripts_track, entry, timeline_in, timeline_in + duration)
                 timeline_in += duration
             project.clipsBin().addItem(hiero.core.BinItem(sequence_obj))
         except Exception as exc:  # pragma: no cover - host specific
@@ -276,22 +352,68 @@ class LoaderThread(QtCore.QThread):
         percent = int((self._processed_shots / float(self._total_shots)) * 100) if self._total_shots else 100
         self.progress.emit(percent)
 
-    def _add_script_track_item(self, scripts_track, clip, entry, timeline_in, timeline_out):
+    def _add_script_track_item(self, sequence_name, scripts_track, entry, timeline_in, timeline_out):
         script_path = entry.get('script_path')
         if not script_path:
             return
+        ok, asset = self._import_script_asset(script_path)
+        if not ok:
+            self._emit_error('HIERO_ERROR', unicode(asset), shot=entry['shot'], sequence_name=sequence_name)
+            return
         duration = max(1, timeline_out - timeline_in)
         try:
-            script_item = hiero.core.TrackItem('%s_script' % entry['shot'])
-            script_item.setSource(clip)
-            script_item.setSourceIn(0)
-            script_item.setSourceOut(duration)
+            script_item = scripts_track.createTrackItem('%s_script' % entry['shot'])
+            source = asset.get('clip') or asset.get('placeholder_sequence')
+            if source is not None:
+                try:
+                    script_item.setSource(source)
+                    script_item.setSourceIn(0)
+                    source_duration = self._clip_duration(source)
+                    script_item.setSourceOut(min(source_duration, duration))
+                except Exception:
+                    pass
             script_item.setTimelineIn(timeline_in)
             script_item.setTimelineOut(timeline_out)
-            self._label_script_item(script_item, script_path, entry['shot'])
+            self._label_script_item(script_item, asset.get('path') or script_path, entry['shot'])
             scripts_track.addItem(script_item)
+            self.message.emit('Linked script %s to shot %s' % (asset.get('path') or script_path, entry['shot']))
         except Exception as exc:  # pragma: no cover - host specific
             LOGGER.warning('Failed to add script item for %s: %s', entry['shot'], exc)
+
+    def _import_script_asset(self, script_path):
+        if hiero is None:
+            return False, 'Hiero API is not available outside Nuke Studio.'
+        project = self._get_active_project()
+        if project is None:
+            try:
+                project = hiero.core.newProject()
+                self._project = project
+            except Exception as exc:  # pragma: no cover
+                LOGGER.exception('Failed to create Hiero project for scripts: %s', exc)
+                return False, 'Unable to create Hiero project: %s' % exc
+        normalized_path = self._normalize_hiero_path(script_path)
+        scripts_bin = self._find_or_create_bin(project.clipsBin(), 'Scripts')
+        try:
+            clip_obj = hiero.core.Clip(normalized_path)
+            bin_item = hiero.core.BinItem(clip_obj)
+            scripts_bin.addItem(bin_item)
+            return True, {
+                'clip': clip_obj,
+                'bin_item': bin_item,
+                'path': normalized_path,
+            }
+        except Exception as exc:  # pragma: no cover - depends on Hiero environment
+            LOGGER.debug('Could not create clip from %s: %s', normalized_path, exc)
+            placeholder_name = os.path.basename(normalized_path) or 'workfile'
+            placeholder_seq = hiero.core.Sequence(placeholder_name)
+            bin_item = hiero.core.BinItem(placeholder_seq)
+            scripts_bin.addItem(bin_item)
+            return True, {
+                'clip': None,
+                'placeholder_sequence': placeholder_seq,
+                'bin_item': bin_item,
+                'path': normalized_path,
+            }
 
     def _label_script_item(self, track_item, script_path, shot_name):
         base_name = os.path.basename(script_path) or script_path

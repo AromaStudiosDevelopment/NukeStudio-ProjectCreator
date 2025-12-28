@@ -23,6 +23,7 @@ try:
 except ImportError:  # pragma: no cover - environment specific
     nuke = None
 
+from nuke_kitsu_loader.core import debug
 from nuke_kitsu_loader.ui.main_widget import KitsuLoaderMainWidget
 from nuke_kitsu_loader.ui.actions import register_actions
 
@@ -33,6 +34,8 @@ _MENU_PATH = "Custom/Kitsu Loader"
 _WINDOW_INSTANCE = None
 _MENU_REGISTERED = False
 LOGGER = logging.getLogger(__name__)
+debug.initialize()
+LOGGER.info('Kitsu Loader plugin initialised; logs at %s', debug.current_log_file())
 
 
 def _main_window():
