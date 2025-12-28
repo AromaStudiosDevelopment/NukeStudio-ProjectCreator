@@ -30,6 +30,16 @@ class UtilsTests(unittest.TestCase):
         expected = r"\\192.168.150.179\share2\storage2\Projects\TVC\Sameh_20250914\footage\copy001\shots\copy001_sh0010\pl01\v001"
         self.assertEqual(utils.extract_location_from_comment(text), expected)
 
+    def test_extract_workfile_from_comment_table(self):
+        text = (
+            "Update notes\n"
+            "| Field | Value |\n"
+            "|---|---|\n"
+            "| Workfile | `/mnt/showA/seq/shot/script_v003.nk` |\n"
+        )
+        expected = r"/mnt/showA/seq/shot/script_v003.nk"
+        self.assertEqual(utils.extract_workfile_from_comment(text), expected)
+
     def test_is_image_sequence_detects_hash_pattern(self):
         is_seq, pattern = utils.is_image_sequence('/path/shot.####.exr')
         self.assertTrue(is_seq)

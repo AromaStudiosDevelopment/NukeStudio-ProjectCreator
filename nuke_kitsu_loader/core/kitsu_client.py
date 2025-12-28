@@ -13,6 +13,7 @@ except ImportError:  # pragma: no cover - gazu not vendorized yet
     gazu = None
 
 from nuke_kitsu_loader.core.cert_utils import configure_kitsu_ca_bundle
+from nuke_kitsu_loader.core import utils
 
 LOGGER = logging.getLogger(__name__)
 
@@ -22,6 +23,11 @@ _SESSION = {
     'user': None,
     'logged_in': False,
 }
+
+try:  # pragma: no cover - Python 2/3 compatibility
+    text_type = unicode
+except NameError:  # pragma: no cover
+    text_type = str
 
 
 def _load_config():
@@ -198,28 +204,25 @@ def get_latest_conform_comment(shot_id):
     except Exception as exc:  # pragma: no cover
         LOGGER.exception('Failed to fetch tasks for shot %s: %s', shot_id, exc)
         return False, str(exc)
-    conform_tasks = []
-    for task in tasks:
-        task_type = task.get('task_type') or {}
-        if (task_type.get('name') or '').lower() == 'conforming':
-            conform_tasks.append(task)
+    conform_tasks = [
+        task for task in tasks
+        if _normalize_task_name(_task_type_name(task)).startswith('conform')
+    ]
     if not conform_tasks:
         return True, None
     comments = []
     for task in conform_tasks:
-        try:
-            comments.extend(gazu.task.get_task_comments(task))
-        except Exception as exc:  # pragma: no cover
-            LOGGER.warning('Failed to fetch comments for task %s: %s', task.get('id'), exc)
+        comments.extend(_fetch_task_comments(task))
     if not comments:
         return True, None
-    comments = sorted(
-        comments,
-        key=lambda comment: comment.get('created_at') or comment.get('updated_at') or '',
-    )
-    latest = comments[-1]
-    text = latest.get('text') or latest.get('description') or latest.get('content')
-    return True, text
+    comments = sorted(comments, key=_comment_sort_key)
+    for comment in reversed(comments):
+        text = _comment_text(comment)
+        if not text:
+            continue
+        if utils.extract_location_from_comment(text):
+            return True, text
+    return True, None
 
 
 def get_latest_workfile_for_shot(shot_id, task_name):
@@ -235,12 +238,19 @@ def get_latest_workfile_for_shot(shot_id, task_name):
     except Exception as exc:  # pragma: no cover
         LOGGER.exception('Failed to fetch tasks for shot %s: %s', shot_id, exc)
         return False, str(exc)
-    desired = task_name.lower()
-    task_candidates = [task for task in tasks if (task.get('task_type', {}).get('name') or '').lower() == desired]
+    desired = _normalize_task_name(task_name)
+    task_candidates = [
+        task for task in tasks
+        if _normalize_task_name(_task_type_name(task)) == desired
+    ]
+    for task in task_candidates:
+        workfile_path = _latest_workfile_from_comments(task)
+        if workfile_path:
+            return True, translate_repo_path_to_unc(workfile_path)
     for task in task_candidates:
         workfile_path = _latest_workfile_from_task(task)
         if workfile_path:
-            return True, workfile_path
+            return True, translate_repo_path_to_unc(workfile_path)
     return True, None
 
 
@@ -258,6 +268,21 @@ def translate_repo_path_to_unc(path_value):
         if path_value.startswith(match_value):
             return path_value.replace(match_value, replace_value, 1)
     return path_value
+
+
+def _latest_workfile_from_comments(task):
+    comments = _fetch_task_comments(task)
+    if not comments:
+        return None
+    comments = sorted(comments, key=_comment_sort_key)
+    for comment in reversed(comments):
+        text = _comment_text(comment)
+        if not text:
+            continue
+        workfile = utils.extract_workfile_from_comment(text)
+        if workfile:
+            return workfile
+    return None
 
 
 def _latest_workfile_from_task(task):
@@ -279,6 +304,44 @@ def _latest_workfile_from_task(task):
     workfiles = sorted(workfiles, key=lambda item: item.get('updated_at') or item.get('created_at') or '')
     latest = workfiles[-1]
     return latest.get('file_path') or latest.get('path') or latest.get('full_path')
+
+
+def _fetch_task_comments(task):
+    task_module = getattr(gazu, 'task', None)
+    if task_module is None:
+        return []
+    fetcher = getattr(task_module, 'all_comments_for_task', None)
+    if fetcher is None:
+        fetcher = getattr(task_module, 'get_task_comments', None)
+    if fetcher is None:
+        return []
+    try:
+        comments = fetcher(task)
+    except Exception as exc:  # pragma: no cover - network/API issues
+        LOGGER.warning('Failed to fetch comments for task %s: %s', task.get('id'), exc)
+        return []
+    return comments or []
+
+
+def _comment_sort_key(comment):
+    return comment.get('created_at') or comment.get('updated_at') or ''
+
+
+def _comment_text(comment):
+    return comment.get('text') or comment.get('description') or comment.get('content') or ''
+
+
+def _task_type_name(task):
+    task_type = task.get('task_type') or {}
+    return task_type.get('name') or task.get('task_type_name') or ''
+
+
+def _normalize_task_name(name):
+    if not name:
+        return ''
+    normalized = text_type(name).strip().lower()
+    normalized = normalized.replace(' ', '_').replace('-', '_')
+    return normalized
 
 
 def get_default_host():

@@ -138,11 +138,6 @@ class KitsuLoaderMainWidget(QtWidgets.QWidget):
             insert_at = max(0, self._sequence_layout.count() - 1)
             self._sequence_layout.insertWidget(insert_at, card)
             self._sequence_cards.append(card)
-            ok, tasks = kitsu_client.get_tasks_for_sequence(sequence.get('id'))
-            if ok:
-                card.set_tasks(tasks)
-            else:
-                self._append_log('Failed to load tasks for %s: %s' % (sequence.get('name'), unicode(tasks)))
         if self._sequence_cards:
             self._project_status.setText('%d sequences ready' % len(self._sequence_cards))
         else:
