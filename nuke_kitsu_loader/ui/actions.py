@@ -181,4 +181,3 @@ class _ScriptContextHelper(object):
         box.setText(text)
         box.setStandardButtons(QtWidgets.QMessageBox.Ok)
         box.show()
-*** End Patch

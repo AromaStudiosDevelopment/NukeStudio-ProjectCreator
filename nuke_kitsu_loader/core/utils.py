@@ -7,7 +7,7 @@ import os
 import re
 
 LOCATION_PATTERN = re.compile(r'location\s*:\s*(.+)', re.IGNORECASE)
-IMAGE_SEQUENCE_PATTERN = re.compile(r'(.*?)([._-])?(%0\dd)' % 4)
+IMAGE_SEQUENCE_PATTERN = re.compile(r'(.*?)([._-])?(%0\d+d)')
 
 
 def extract_location_from_comment(text):
