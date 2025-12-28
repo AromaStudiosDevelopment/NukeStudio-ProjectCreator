@@ -33,6 +33,7 @@ If a future environment deviates (missing `gazu`, inaccessible UNC path, etc.), 
 | `kitsu_host` | Default API root shown in the login widget. |
 | `nuke_executable` | Optional absolute path to `Nuke.exe`/`NukeX.exe`. When set, the **Open Script Workfile** action launches this executable and passes the `.nk` path. Leave blank to fall back to the OS default file handler. |
 | `path_mappings` | List of `{match, replace}` entries that convert repository-style paths into UNC paths reachable from the Nuke Studio host. |
+| `task_type_filter` | Object with `enabled` (boolean) and `allowed_task_types` (array of strings). When enabled, only task types in the allowed list appear in sequence card task dropdowns. Use this to filter out 3D tasks (Modeling, Lighting, Animation, etc.) and show only 2D-relevant tasks (Conform, Compositing, Roto, Paint, Tracking, etc.). |
 
 ## Development quick start
 
