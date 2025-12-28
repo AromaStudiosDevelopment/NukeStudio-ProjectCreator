@@ -17,6 +17,9 @@ class _FakeShotModule(object):
 
     def all_shots_for_sequence(self, sequence):  # pragma: no cover - not used here
         return self._tasks_map.get(sequence.get('id'), [])
+    
+    def get_sequence(self, sequence_id):
+        return {'id': sequence_id, 'name': 'Test Sequence'}
 
 
 class _FakeTaskModule(object):
@@ -25,6 +28,9 @@ class _FakeTaskModule(object):
 
     def all_tasks_for_shot(self, shot):
         return self._tasks_map.get(shot.get('id'), [])
+    
+    def all_tasks_for_sequence(self, sequence):
+        return self._tasks_map.get(sequence.get('id'), [])
 
 
 class _FakeFilesModule(object):
@@ -96,6 +102,73 @@ class KitsuClientTests(unittest.TestCase):
         ok, path = kitsu_client.get_latest_workfile_for_shot('shot-2', 'Compositing')
         self.assertTrue(ok)
         self.assertIsNone(path)
+
+    def test_get_tasks_for_sequence_filters_2d_tasks_when_enabled(self):
+        """Test that only 2D task types are returned when filter is enabled."""
+        # Setup sequence with mixed 2D and 3D tasks
+        self._tasks_map['seq-1'] = [
+            {'id': 'task-1', 'task_type': {'id': 'tt-1', 'name': 'Conform'}},
+            {'id': 'task-2', 'task_type': {'id': 'tt-2', 'name': 'Compositing'}},
+            {'id': 'task-3', 'task_type': {'id': 'tt-3', 'name': 'Lighting'}},
+            {'id': 'task-4', 'task_type': {'id': 'tt-4', 'name': 'Animation'}},
+            {'id': 'task-5', 'task_type': {'id': 'tt-5', 'name': 'Roto'}},
+        ]
+        # Enable filter with 2D task types
+        kitsu_client._CONFIG = {  # pylint: disable=protected-access
+            'task_type_filter': {
+                'enabled': True,
+                'allowed_task_types': ['Conform', 'Compositing', 'Roto']
+            }
+        }
+        
+        ok, tasks = kitsu_client.get_tasks_for_sequence('seq-1')
+        self.assertTrue(ok)
+        task_names = [t['name'] for t in tasks]
+        # Should only include 2D tasks
+        self.assertIn('Conform', task_names)
+        self.assertIn('Compositing', task_names)
+        self.assertIn('Roto', task_names)
+        # Should exclude 3D tasks
+        self.assertNotIn('Lighting', task_names)
+        self.assertNotIn('Animation', task_names)
+        self.assertEqual(len(tasks), 3)
+
+    def test_get_tasks_for_sequence_returns_all_when_filter_disabled(self):
+        """Test that all task types are returned when filter is disabled."""
+        self._tasks_map['seq-2'] = [
+            {'id': 'task-1', 'task_type': {'id': 'tt-1', 'name': 'Conform'}},
+            {'id': 'task-2', 'task_type': {'id': 'tt-2', 'name': 'Lighting'}},
+            {'id': 'task-3', 'task_type': {'id': 'tt-3', 'name': 'Animation'}},
+        ]
+        # Disable filter
+        kitsu_client._CONFIG = {  # pylint: disable=protected-access
+            'task_type_filter': {
+                'enabled': False,
+                'allowed_task_types': ['Conform']
+            }
+        }
+        
+        ok, tasks = kitsu_client.get_tasks_for_sequence('seq-2')
+        self.assertTrue(ok)
+        task_names = [t['name'] for t in tasks]
+        # Should include all tasks when filter is disabled
+        self.assertIn('Conform', task_names)
+        self.assertIn('Lighting', task_names)
+        self.assertIn('Animation', task_names)
+        self.assertEqual(len(tasks), 3)
+
+    def test_get_tasks_for_sequence_returns_all_when_no_filter_config(self):
+        """Test that all task types are returned when no filter config exists."""
+        self._tasks_map['seq-3'] = [
+            {'id': 'task-1', 'task_type': {'id': 'tt-1', 'name': 'Conform'}},
+            {'id': 'task-2', 'task_type': {'id': 'tt-2', 'name': 'Lighting'}},
+        ]
+        # No filter config
+        kitsu_client._CONFIG = {}  # pylint: disable=protected-access
+        
+        ok, tasks = kitsu_client.get_tasks_for_sequence('seq-3')
+        self.assertTrue(ok)
+        self.assertEqual(len(tasks), 2)
 
 
 if __name__ == '__main__':  # pragma: no cover

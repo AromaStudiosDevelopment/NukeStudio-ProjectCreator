@@ -6,5 +6,18 @@
       "match": "\\\\192.168.150.179\\share2\\storage2\\Projects",
       "replace": "X:\\storage2\\Projects"
     }
-  ]
+  ],
+  "task_type_filter": {
+    "enabled": true,
+    "allowed_task_types": [
+      "Conform",
+      "Compositing",
+      "Roto",
+      "Paint",
+      "Tracking",
+      "Rotoscopy",
+      "Keying",
+      "Prep"
+    ]
+  }
 }
