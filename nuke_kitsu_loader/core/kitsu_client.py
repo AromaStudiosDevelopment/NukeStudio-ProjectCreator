@@ -148,7 +148,11 @@ def get_sequences(project_id):
 
 
 def get_tasks_for_sequence(sequence_id):
-    """Return distinct task names associated with the sequence."""
+    """Return distinct task names associated with the sequence.
+    
+    Filters tasks to only include 2D-relevant task types if task_type_filter
+    is enabled in the configuration.
+    """
     ok, error = _ensure_session()
     if not ok:
         return False, error
@@ -158,6 +162,13 @@ def get_tasks_for_sequence(sequence_id):
     except Exception as exc:  # pragma: no cover
         LOGGER.exception('Failed to fetch tasks for %s: %s', sequence_id, exc)
         return False, str(exc)
+    
+    # Load filter configuration
+    config = _load_config()
+    filter_config = config.get('task_type_filter', {})
+    filter_enabled = filter_config.get('enabled', False)
+    allowed_task_types = filter_config.get('allowed_task_types', [])
+    
     seen = set()
     ordered = []
     for task in tasks:
@@ -165,6 +176,10 @@ def get_tasks_for_sequence(sequence_id):
         name = task_type.get('name')
         if not name or name in seen:
             continue
+        # Apply filter if enabled: ensuring 2D task types
+        if filter_enabled and allowed_task_types:
+            if name not in allowed_task_types:
+                continue
         seen.add(name)
         ordered.append({'id': task_type.get('id'), 'name': name})
     return True, ordered
