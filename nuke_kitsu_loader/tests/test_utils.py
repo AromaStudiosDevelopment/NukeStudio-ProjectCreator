@@ -37,6 +37,31 @@ class UtilsTests(unittest.TestCase):
         finally:
             os.unlink(path)
 
+    def test_extract_workfile_from_comment(self):
+        text = "Workfile: \\\\192.168.150.179\\share2\\release\\gizmo_10_v02.nk"
+        self.assertEqual(utils.extract_workfile_from_comment(text), "\\\\192.168.150.179\\share2\\release\\gizmo_10_v02.nk")
+
+    def test_extract_workfile_returns_none_when_missing(self):
+        self.assertIsNone(utils.extract_workfile_from_comment("No workfile keyword here"))
+
+    def test_parse_task_comment_with_both_fields(self):
+        text = "Workfile: \\\\192.168.150.179\\share2\\release\\gizmo_10_v02.nk\nLocation: \\\\192.168.150.179\\share2\\footage\\A002_C018_0922BW_002.mov"
+        result = utils.parse_task_comment(text)
+        self.assertEqual(result['workfile'], "\\\\192.168.150.179\\share2\\release\\gizmo_10_v02.nk")
+        self.assertEqual(result['location'], "\\\\192.168.150.179\\share2\\footage\\A002_C018_0922BW_002.mov")
+
+    def test_parse_task_comment_with_only_location(self):
+        text = "Location: \\\\192.168.150.179\\share2\\footage\\render.mov"
+        result = utils.parse_task_comment(text)
+        self.assertIsNone(result['workfile'])
+        self.assertEqual(result['location'], "\\\\192.168.150.179\\share2\\footage\\render.mov")
+
+    def test_parse_task_comment_with_only_workfile(self):
+        text = "Workfile: \\\\server\\path\\script.nk"
+        result = utils.parse_task_comment(text)
+        self.assertEqual(result['workfile'], "\\\\server\\path\\script.nk")
+        self.assertIsNone(result['location'])
+
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()

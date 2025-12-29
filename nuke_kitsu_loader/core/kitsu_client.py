@@ -189,24 +189,32 @@ def get_shots_for_sequence(sequence_id):
 
 def get_latest_conform_comment(shot_id):
     """Return the newest conform comment body for the given shot."""
+    return get_latest_task_comment(shot_id, 'Conform')
+
+
+def get_latest_task_comment(shot_id, task_name):
+    """Return the newest comment body for the given shot and task type."""
     ok, error = _ensure_session()
     if not ok:
         return False, error
+    if not task_name:
+        return True, None
     try:
         shot = gazu.shot.get_shot(shot_id)
         tasks = gazu.task.all_tasks_for_shot(shot)
     except Exception as exc:  # pragma: no cover
         LOGGER.exception('Failed to fetch tasks for shot %s: %s', shot_id, exc)
         return False, str(exc)
-    conform_tasks = []
+    matching_tasks = []
+    task_name_lower = task_name.lower()
     for task in tasks:
         task_type = task.get('task_type') or {}
-        if (task_type.get('name') or '').lower() == 'conform':
-            conform_tasks.append(task)
-    if not conform_tasks:
+        if (task_type.get('name') or '').lower() == task_name_lower:
+            matching_tasks.append(task)
+    if not matching_tasks:
         return True, None
     comments = []
-    for task in conform_tasks:
+    for task in matching_tasks:
         try:
             comments.extend(gazu.task.get_task_comments(task))
         except Exception as exc:  # pragma: no cover

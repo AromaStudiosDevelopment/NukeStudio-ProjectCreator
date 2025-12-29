@@ -7,6 +7,7 @@ import os
 import re
 
 LOCATION_PATTERN = re.compile(r'location\s*:\s*(.+)', re.IGNORECASE)
+WORKFILE_PATTERN = re.compile(r'workfile\s*:\s*(.+)', re.IGNORECASE)
 IMAGE_SEQUENCE_PATTERN = re.compile(r'(.*?)([._-])?(%0\d+d)')
 
 
@@ -20,6 +21,35 @@ def extract_location_from_comment(text):
     candidate = match.group(1).strip()
     candidate = candidate.rstrip(' ;.,')
     return candidate or None
+
+
+def extract_workfile_from_comment(text):
+    """Extract a workfile path from a task comment."""
+    if not text:
+        return None
+    match = WORKFILE_PATTERN.search(text)
+    if not match:
+        return None
+    candidate = match.group(1).strip()
+    candidate = candidate.rstrip(' ;.,')
+    return candidate or None
+
+
+def parse_task_comment(text):
+    """Parse a task comment to extract both workfile and location paths.
+    
+    Returns a dict with 'workfile' and 'location' keys, either of which may be None.
+    """
+    if not text:
+        return {'workfile': None, 'location': None}
+    
+    workfile = extract_workfile_from_comment(text)
+    location = extract_location_from_comment(text)
+    
+    return {
+        'workfile': workfile,
+        'location': location,
+    }
 
 
 def is_image_sequence(path_value):

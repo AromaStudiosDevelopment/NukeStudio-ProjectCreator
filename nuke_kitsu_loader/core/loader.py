@@ -97,6 +97,24 @@ class LoaderThread(QtCore.QThread):
             return False, str(exc)
         return True, {'clip': clip, 'bin': footage_bin, 'project': project}
 
+    def _import_clip_to_render_bin(self, media_path):
+        """Import a clip to the Render bin."""
+        if hiero is None:
+            return False, 'Hiero API is not available outside Nuke Studio.'
+        projects = hiero.core.projects()
+        if not projects:
+            return False, 'No open Hiero project to import into.'
+        project = projects[-1]
+        self._project = project
+        root_bin = project.clipsBin()
+        render_bin = self._find_or_create_bin(root_bin, 'render')
+        try:
+            clip = render_bin.createClip(media_path)
+        except Exception as exc:  # pragma: no cover - depends on Hiero environment
+            LOGGER.exception('Failed to import %s: %s', media_path, exc)
+            return False, str(exc)
+        return True, {'clip': clip, 'bin': render_bin, 'project': project}
+
     def _find_or_create_bin(self, root_bin, name):
         existing = self._find_bin_by_name(root_bin, name)
         if existing:
@@ -162,7 +180,7 @@ class LoaderThread(QtCore.QThread):
                 'shots_imported': 0,
                 'errors': errors,
             }
-        ok, payload = self._build_sequence_timeline(sequence_name, shot_entries)
+        ok, payload = self._build_sequence_timeline(sequence_name, shot_entries, task_name)
         if not ok:
             errors.append(self._emit_error('HIERO_ERROR', unicode(payload), sequence_name=sequence_name))
         else:
@@ -176,10 +194,12 @@ class LoaderThread(QtCore.QThread):
 
     def _process_shot(self, sequence_name, shot, task_name):
         shot_name = shot.get('name')
-        ok, comment = kitsu_client.get_latest_conform_comment(shot.get('id'))
+        
+        # Get Conform comment for plate location
+        ok, conform_comment = kitsu_client.get_latest_conform_comment(shot.get('id'))
         if not ok:
-            return {'fatal_error': self._emit_error('KITSU_ERROR', unicode(comment), shot=shot_name, sequence_name=sequence_name)}
-        location = utils.extract_location_from_comment(comment)
+            return {'fatal_error': self._emit_error('KITSU_ERROR', unicode(conform_comment), shot=shot_name, sequence_name=sequence_name)}
+        location = utils.extract_location_from_comment(conform_comment)
         if not location:
             return {'fatal_error': self._emit_error('MISSING_LOCATION', 'No location found in conform comment', shot=shot_name, sequence_name=sequence_name)}
         location = kitsu_client.translate_repo_path_to_unc(location)
@@ -189,35 +209,55 @@ class LoaderThread(QtCore.QThread):
         if not ok:
             return {'fatal_error': self._emit_error('HIERO_ERROR', unicode(clip_payload), shot=shot_name, sequence_name=sequence_name)}
         self.message.emit('Imported plate for shot %s from %s' % (shot_name, location))
-        script_path, warning = self._retrieve_script_path(shot, task_name, sequence_name)
+        
+        # Get selected task comment for both workfile and render location
+        render_clip = None
+        render_path = None
+        script_path = None
         warnings = []
-        if warning:
-            warnings.append(warning)
+        
+        if task_name:
+            ok, task_comment = kitsu_client.get_latest_task_comment(shot.get('id'), task_name)
+            if not ok:
+                warnings.append(self._emit_error('KITSU_ERROR', unicode(task_comment), shot=shot_name, sequence_name=sequence_name))
+            elif task_comment:
+                # Parse the comment for both workfile and location
+                parsed = utils.parse_task_comment(task_comment)
+                
+                # Handle workfile
+                if parsed.get('workfile'):
+                    script_path = kitsu_client.translate_repo_path_to_unc(parsed['workfile'])
+                    if not utils.path_exists(script_path):
+                        warnings.append(self._emit_error('UNREACHABLE_PATH', 'Workfile not reachable: %s' % script_path, shot=shot_name, sequence_name=sequence_name))
+                        script_path = None
+                
+                # Handle render location
+                if parsed.get('location'):
+                    render_path = kitsu_client.translate_repo_path_to_unc(parsed['location'])
+                    if not utils.path_exists(render_path):
+                        warnings.append(self._emit_error('UNREACHABLE_PATH', 'Render not reachable: %s' % render_path, shot=shot_name, sequence_name=sequence_name))
+                        render_path = None
+                    else:
+                        ok, render_clip_payload = self._import_clip_to_render_bin(render_path)
+                        if not ok:
+                            warnings.append(self._emit_error('HIERO_ERROR', unicode(render_clip_payload), shot=shot_name, sequence_name=sequence_name))
+                        else:
+                            render_clip = render_clip_payload.get('clip')
+                            self.message.emit('Imported render for shot %s from %s' % (shot_name, render_path))
+        
         return {
             'entry': {
                 'shot': shot_name,
                 'clip': clip_payload.get('clip'),
                 'path': location,
                 'script_path': script_path,
+                'render_clip': render_clip,
+                'render_path': render_path,
             },
             'warnings': warnings,
         }
 
-    def _retrieve_script_path(self, shot, task_name, sequence_name):
-        if not task_name:
-            return None, None
-        shot_name = shot.get('name')
-        ok, result = kitsu_client.get_latest_workfile_for_shot(shot.get('id'), task_name)
-        if not ok:
-            return None, self._emit_error('KITSU_ERROR', unicode(result), shot=shot_name, sequence_name=sequence_name)
-        if not result:
-            return None, self._emit_error('MISSING_WORKFILE', 'No %s workfile found' % task_name, shot=shot_name, sequence_name=sequence_name)
-        script_path = kitsu_client.translate_repo_path_to_unc(result)
-        if not utils.path_exists(script_path):
-            return None, self._emit_error('UNREACHABLE_PATH', 'Workfile not reachable: %s' % script_path, shot=shot_name, sequence_name=sequence_name)
-        return script_path, None
-
-    def _build_sequence_timeline(self, sequence_name, shot_entries):
+    def _build_sequence_timeline(self, sequence_name, shot_entries, task_name=None):
         project = self._get_active_project()
         if project is None:
             return False, 'No active Hiero project available.'
@@ -229,14 +269,30 @@ class LoaderThread(QtCore.QThread):
                 sequence_obj.setFramerate(project.framerate())
             except AttributeError:
                 pass
+            
+            # Create tracks in the order: render_track (top), scripts_track, footage_track (bottom)
             footage_track = hiero.core.VideoTrack('footage')
-            scripts_track = hiero.core.VideoTrack('scripts')
+            scripts_track = hiero.core.VideoTrack(task_name if task_name else 'scripts')
+            render_track = None
+            
+            # Check if any entry has render clips
+            has_renders = any(entry.get('render_clip') for entry in shot_entries)
+            if has_renders and task_name:
+                render_track_name = '%s_render' % task_name
+                render_track = hiero.core.VideoTrack(render_track_name)
+            
+            # Add tracks in reverse order (Hiero adds from bottom to top)
             sequence_obj.addTrack(footage_track)
             sequence_obj.addTrack(scripts_track)
+            if render_track:
+                sequence_obj.addTrack(render_track)
+            
             timeline_in = 0
             for entry in shot_entries:
                 clip = entry['clip']
                 duration = self._clip_duration(clip)
+                
+                # Add footage track item
                 track_item = hiero.core.TrackItem('%s_plate' % entry['shot'])
                 track_item.setSource(clip)
                 track_item.setSourceIn(0)
@@ -244,8 +300,16 @@ class LoaderThread(QtCore.QThread):
                 track_item.setTimelineIn(timeline_in)
                 track_item.setTimelineOut(timeline_in + duration)
                 footage_track.addItem(track_item)
+                
+                # Add script track item
                 self._add_script_track_item(scripts_track, clip, entry, timeline_in, timeline_in + duration)
+                
+                # Add render track item if render clip exists
+                if render_track and entry.get('render_clip'):
+                    self._add_render_track_item(render_track, entry, timeline_in, timeline_in + duration)
+                
                 timeline_in += duration
+            
             project.clipsBin().addItem(hiero.core.BinItem(sequence_obj))
         except Exception as exc:  # pragma: no cover - host specific
             LOGGER.exception('Failed to build sequence %s: %s', sequence_name, exc)
@@ -292,6 +356,33 @@ class LoaderThread(QtCore.QThread):
             scripts_track.addItem(script_item)
         except Exception as exc:  # pragma: no cover - host specific
             LOGGER.warning('Failed to add script item for %s: %s', entry['shot'], exc)
+
+    def _add_render_track_item(self, render_track, entry, timeline_in, timeline_out):
+        """Add a render clip to the render track."""
+        render_clip = entry.get('render_clip')
+        render_path = entry.get('render_path')
+        if not render_clip:
+            return
+        duration = self._clip_duration(render_clip)
+        try:
+            render_item = hiero.core.TrackItem('%s_render' % entry['shot'])
+            render_item.setSource(render_clip)
+            render_item.setSourceIn(0)
+            render_item.setSourceOut(duration)
+            render_item.setTimelineIn(timeline_in)
+            render_item.setTimelineOut(timeline_out)
+            # Store render path as metadata
+            if render_path:
+                try:
+                    metadata = render_item.metadata()
+                    if metadata is not None:
+                        metadata.setValue('kitsu.render_path', render_path)
+                        render_item.setMetadata(metadata)
+                except Exception:
+                    pass
+            render_track.addItem(render_item)
+        except Exception as exc:  # pragma: no cover - host specific
+            LOGGER.warning('Failed to add render item for %s: %s', entry['shot'], exc)
 
     def _label_script_item(self, track_item, script_path, shot_name):
         base_name = os.path.basename(script_path) or script_path
