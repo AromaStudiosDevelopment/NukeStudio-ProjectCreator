@@ -22,13 +22,14 @@ for seq in all_sequences:   #fetching all sequences shots tasks
         for task in all_tasks:
             #TODO if task["task_type_name"] in task_types:    #ensuring 2D task types
             comments = gazu.task.all_comments_for_task(task)
-            if task['task_type_name'] == 'Conforming':
+            # print comments to extract location and workfile info
+            if task['task_type_name'] == 'Conforming':  #filtering conforming tasks
                 for comment in comments:
-                    comment_text = comment["text"]
+                    comment_text = comment["text"]  #getting comment text
                     location_pattern = r"location.*?`([^`]+)`"
                     match = re.search(location_pattern, comment_text, re.IGNORECASE | re.DOTALL)
                     if match:
-                        extracted_location = match.group(1)
+                        extracted_location = match.group(1) #extracting location path
                         print(f"Shot: {shot['name']}, Task: {task['task_type_name']}, Location: {extracted_location}")
                     print("*"*20)
             if task['task_type_name'] == 'Compositing':

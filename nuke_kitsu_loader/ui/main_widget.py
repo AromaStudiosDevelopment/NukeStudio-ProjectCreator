@@ -6,7 +6,7 @@ from __future__ import absolute_import
 from PySide2 import QtCore, QtWidgets  # pylint: disable=import-error
 
 from nuke_kitsu_loader.core import debug, kitsu_client
-from nuke_kitsu_loader.core.loader import LoaderThread
+from nuke_kitsu_loader.core.loader import LoaderThread, MainThreadExecutor
 from nuke_kitsu_loader.ui.login_widget import LoginWidget
 from nuke_kitsu_loader.ui.sequence_card import SequenceCard
 
@@ -37,6 +37,8 @@ class KitsuLoaderMainWidget(QtWidgets.QWidget):
         self._sequence_scroll.setWidget(self._sequence_container)
         self._loader_thread = None
         self._sequence_cards = []
+        self._main_thread_executor = MainThreadExecutor()
+        self._current_project = None
 
         self._build_layout()
         self._connect_signals()
@@ -112,7 +114,7 @@ class KitsuLoaderMainWidget(QtWidgets.QWidget):
             return
         self._append_log('Starting loader for %d sequence(s)' % len(selections))
         self._load_button.setEnabled(False)
-        self._loader_thread = LoaderThread(selections)
+        self._loader_thread = LoaderThread(selections, self._main_thread_executor)
         self._loader_thread.message.connect(self._append_log)
         self._loader_thread.progress.connect(self._on_progress)
         self._loader_thread.completed.connect(self._on_completed)
@@ -154,9 +156,12 @@ class KitsuLoaderMainWidget(QtWidgets.QWidget):
         for card in self._sequence_cards:
             if not card.is_selected():
                 continue
+            selected_tasks = card.selected_tasks()
+            if not selected_tasks:
+                continue
             selections.append({
                 'id': card.sequence_id(),
                 'name': card.sequence_name(),
-                'task': card.selected_task(),
+                'tasks': selected_tasks,  # Now a list of task names
             })
         return selections
