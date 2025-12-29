@@ -22,6 +22,7 @@ class KitsuLoaderMainWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(KitsuLoaderMainWidget, self).__init__(parent)
         self._login_widget = LoginWidget(self)
+        self._login_widget.setVisible(False)  # Hide authentication UI
         self._project_combo = QtWidgets.QComboBox(self)
         self._project_combo.setEnabled(False)
         self._project_status = QtWidgets.QLabel('No projects loaded', self)
@@ -43,6 +44,9 @@ class KitsuLoaderMainWidget(QtWidgets.QWidget):
         self._build_layout()
         self._connect_signals()
         self._announce_log_location()
+        
+        # Auto-login on initialization
+        QtCore.QTimer.singleShot(100, self._auto_login)
 
     def _build_layout(self):
         layout = QtWidgets.QVBoxLayout(self)
@@ -86,6 +90,11 @@ class KitsuLoaderMainWidget(QtWidgets.QWidget):
         log_path = debug.current_log_file()
         if log_path:
             self._append_log('Debug log file: %s' % log_path)
+
+    def _auto_login(self):
+        """Automatically trigger login using environment variables."""
+        self._append_log('Attempting auto-login...')
+        self._login_widget._attempt_login()
 
     def _on_project_changed(self, index):
         project = self._project_combo.itemData(index)

@@ -3,6 +3,8 @@
 
 from __future__ import absolute_import
 
+import os
+
 from PySide2 import QtCore, QtWidgets  # pylint: disable=import-error
 
 from nuke_kitsu_loader.core import kitsu_client
@@ -21,24 +23,20 @@ class LoginWidget(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
         super(LoginWidget, self).__init__(parent)
-        self._host = QtWidgets.QLineEdit(self)
-        self._username = QtWidgets.QLineEdit(self)
-        self._password = QtWidgets.QLineEdit(self)
-        self._password.setEchoMode(QtWidgets.QLineEdit.Password)
+        # Read environment variables
+        self._host_value = os.environ.get('KITSU_SERVER', '')
+        self._username_value = os.environ.get('KITSU_LOGIN', '')
+        self._password_value = os.environ.get('KITSU_PWD', '')
+        
+        # Display labels instead of input fields
+        self._host = QtWidgets.QLabel(self._host_value or 'Not set (KITSU_SERVER)', self)
+        self._username = QtWidgets.QLabel(self._username_value or 'Not set (KITSU_LOGIN)', self)
+        self._password = QtWidgets.QLabel('****' if self._password_value else 'Not set (KITSU_PWD)', self)
         self._login_button = QtWidgets.QPushButton('Login', self)
         self._status = QtWidgets.QLabel('Not logged in', self)
 
         self._build_layout()
         self._login_button.clicked.connect(self._attempt_login)
-
-        default_host = kitsu_client.get_default_host() or ''
-        if default_host:
-            self._host.setText(default_host)
-            self._host.setReadOnly(True)
-            self._host.setToolTip('Update configs/plugin_config.json to change the Kitsu host')
-        else:
-            self._host.setPlaceholderText('Set kitsu_host in configs/plugin_config.json')
-            self._host.setReadOnly(True)
 
     def _build_layout(self):
         layout = QtWidgets.QFormLayout(self)
@@ -53,11 +51,23 @@ class LoginWidget(QtWidgets.QWidget):
 
     def _attempt_login(self):
         self._set_busy(True)
-        host = kitsu_client.get_default_host()
-        username = self._username.text().strip()
-        password = self._password.text().strip()
+        host = self._host_value or kitsu_client.get_default_host()
+        username = self._username_value
+        password = self._password_value
         if not host:
-            message = 'kitsu_host is not configured. Edit configs/plugin_config.json.'
+            message = 'KITSU_SERVER environment variable is not set.'
+            self._status.setText(message)
+            self.login_failed.emit(unicode(message))
+            self._set_busy(False)
+            return
+        if not username:
+            message = 'KITSU_LOGIN environment variable is not set.'
+            self._status.setText(message)
+            self.login_failed.emit(unicode(message))
+            self._set_busy(False)
+            return
+        if not password:
+            message = 'KITSU_PWD environment variable is not set.'
             self._status.setText(message)
             self.login_failed.emit(unicode(message))
             self._set_busy(False)

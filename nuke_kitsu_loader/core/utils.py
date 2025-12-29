@@ -84,6 +84,13 @@ def _extract_from_inline_code(text, field_name):
     return None
 
 
+def _normalize_path_separators(path_value):
+    """Convert all backslashes to forward slashes in paths."""
+    if not path_value:
+        return path_value
+    return path_value.replace(BACKSLASH, '/')
+
+
 def _clean_table_value(value):
     """Normalize markdown/table formatted entries."""
     if not value:
@@ -100,6 +107,8 @@ def _clean_table_value(value):
         pass
     elif candidate.startswith(BACKSLASH):
         candidate = UNC_PREFIX + candidate.lstrip(BACKSLASH)
+    # Normalize path separators to forward slashes
+    candidate = _normalize_path_separators(candidate)
     return candidate or None
 
 

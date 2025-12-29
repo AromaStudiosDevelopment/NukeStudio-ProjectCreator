@@ -194,6 +194,52 @@ class LoaderThread(QtCore.QThread):
             'path': normalized_path,
         }
 
+    def _import_clip_to_render_bin(self, media_path):
+        """Import render clip to Render bin (similar to footage import)."""
+        if hiero is None:
+            return False, 'Hiero API is not available outside Nuke Studio.'
+        LOGGER.info('Starting render import for: %s', media_path)
+        project = self._get_active_project()
+        if project is None:
+            LOGGER.info('No active project found; creating new project')
+            try:
+                project = self._invoke_on_main_thread(lambda: hiero.core.newProject())
+                self._project = project
+                LOGGER.info('Created new Hiero project')
+            except Exception as exc:  # pragma: no cover - depends on Hiero environment
+                LOGGER.exception('Failed to create Hiero project: %s', exc)
+                return False, 'Unable to create Hiero project: %s' % exc
+        normalized_path = self._normalize_hiero_path(media_path)
+        LOGGER.info('Normalized render path: %s', normalized_path)
+        try:
+            root_bin = self._invoke_on_main_thread(lambda: project.clipsBin())
+            LOGGER.debug('Got project clips bin')
+        except Exception as exc:
+            LOGGER.exception('Failed to access project clips bin: %s', exc)
+            return False, 'Cannot access project clips bin: %s' % exc
+        render_bin = self._find_or_create_bin(root_bin, 'Render')
+        if render_bin is None:
+            return False, 'Failed to create or find Render bin'
+        LOGGER.info('Using Render bin: %s', render_bin.name())
+        try:
+            LOGGER.info('Calling importFolder on render path: %s', normalized_path)
+            imported_result = self._invoke_on_main_thread(lambda: render_bin.importFolder(normalized_path))
+            LOGGER.info('importFolder completed for render, result type: %s', type(imported_result).__name__)
+        except Exception as exc:  # pragma: no cover - depends on Hiero environment
+            LOGGER.exception('Failed to import render %s: %s', normalized_path, exc)
+            return False, 'Import failed: %s' % str(exc)
+        clip = self._resolve_imported_clip(render_bin, imported_result)
+        if clip is None:
+            LOGGER.error('No render clip/sequence found after import in bin or result')
+            return False, 'No sequence or clip found in %s after import.' % normalized_path
+        LOGGER.info('Successfully resolved render clip: %s (type: %s)', getattr(clip, 'name', lambda: 'unknown')(), type(clip).__name__)
+        return True, {
+            'clip': clip,
+            'bin': render_bin,
+            'project': project,
+            'path': normalized_path,
+        }
+
     def _find_or_create_bin(self, root_bin, name):
         LOGGER.debug('Finding or creating bin: %s', name)
         try:
@@ -218,10 +264,13 @@ class LoaderThread(QtCore.QThread):
             return None
 
     def _normalize_hiero_path(self, path_value):
-        normalized = os.path.normpath(path_value)
+        # Use forward slashes instead of backslashes
+        normalized = path_value.replace('\\', '/')
         if hiero is not None:
             try:
                 normalized = hiero.core.remapPath(normalized)
+                # Ensure forward slashes after remapPath
+                normalized = normalized.replace('\\', '/')
             except Exception:  # pragma: no cover
                 pass
         return normalized
@@ -309,7 +358,7 @@ class LoaderThread(QtCore.QThread):
             self._processed_shots += 1
             self._emit_progress()
         
-        # For each selected task, fetch workfiles for all shots
+        # For each selected task, fetch workfiles and renders for all shots
         for task_name in task_names:
             for entry in shot_entries:
                 if self._cancel:
@@ -319,6 +368,8 @@ class LoaderThread(QtCore.QThread):
                 shot = next((s for s in plan['shots'] if s.get('name') == shot_name), None)
                 if not shot:
                     continue
+                
+                # Get workfile path
                 script_path, warning = self._retrieve_script_path(shot, task_name, sequence_name)
                 if warning:
                     errors.append(warning)
@@ -326,6 +377,15 @@ class LoaderThread(QtCore.QThread):
                 if 'workfiles' not in entry:
                     entry['workfiles'] = {}
                 entry['workfiles'][task_name] = script_path
+                
+                # Get render path
+                render_result = self._retrieve_render_path(shot, task_name, sequence_name)
+                if render_result.get('error'):
+                    errors.append(render_result['error'])
+                # Add render paths to entry, keyed by task name
+                if 'renders' not in entry:
+                    entry['renders'] = {}
+                entry['renders'][task_name] = render_result.get('render_info')
         
         if not shot_entries:
             self.message.emit('No plates imported for sequence %s' % sequence_name)
@@ -388,6 +448,35 @@ class LoaderThread(QtCore.QThread):
         LOGGER.debug('Found workfile for %s task: %s', task_name, script_path)
         return script_path, None
 
+    def _retrieve_render_path(self, shot, task_name, sequence_name):
+        """Retrieve render location from task comments and import the clip."""
+        if not task_name:
+            return {'render_info': None}
+        shot_name = shot.get('name')
+        ok, result = kitsu_client.get_latest_render_for_shot(shot.get('id'), task_name)
+        if not ok:
+            return {'error': self._emit_error('KITSU_ERROR', unicode(result), shot=shot_name, sequence_name=sequence_name)}
+        if not result:
+            LOGGER.debug('No %s render found for shot %s', task_name, shot_name)
+            return {'render_info': None}  # Not an error, just no render yet
+        
+        render_path = kitsu_client.translate_repo_path_to_unc(result)
+        if not utils.path_exists(render_path):
+            return {'error': self._emit_error('UNREACHABLE_PATH', 'Render path not reachable: %s' % render_path, shot=shot_name, sequence_name=sequence_name)}
+        
+        # Import render clip to Render bin
+        ok, clip_payload = self._import_clip_to_render_bin(render_path)
+        if not ok:
+            return {'error': self._emit_error('HIERO_ERROR', unicode(clip_payload), shot=shot_name, sequence_name=sequence_name)}
+        
+        self.message.emit('Imported render for shot %s from %s' % (shot_name, render_path))
+        return {
+            'render_info': {
+                'clip': clip_payload.get('clip'),
+                'path': render_path,
+            }
+        }
+
     def _build_sequence_timeline(self, sequence_name, shot_entries, task_names):
         project = self._get_active_project()
         if project is None:
@@ -410,13 +499,20 @@ class LoaderThread(QtCore.QThread):
             footage_track = self._invoke_on_main_thread(lambda: hiero.core.VideoTrack('footage'))
             self._invoke_on_main_thread(lambda: sequence_obj.addTrack(footage_track))
             
-            # Create comp track for each selected task
+            # Create comp track and render track for each selected task
             comp_tracks = {}
+            render_tracks = {}
             for task_name in task_names:
                 LOGGER.debug('Creating comp track for task: %s', task_name)
                 comp_track = self._invoke_on_main_thread(lambda tn=task_name: hiero.core.VideoTrack(tn))
                 self._invoke_on_main_thread(lambda ct=comp_track: sequence_obj.addTrack(ct))
                 comp_tracks[task_name] = comp_track
+                
+                LOGGER.debug('Creating render track for task: %s', task_name)
+                render_track_name = '%s_render' % task_name
+                render_track = self._invoke_on_main_thread(lambda rtn=render_track_name: hiero.core.VideoTrack(rtn))
+                self._invoke_on_main_thread(lambda rt=render_track: sequence_obj.addTrack(rt))
+                render_tracks[task_name] = render_track
             
             timeline_in = 0
             for idx, entry in enumerate(shot_entries):
@@ -445,12 +541,21 @@ class LoaderThread(QtCore.QThread):
                 
                 # Add workfile for each selected task to corresponding comp track
                 workfiles = entry.get('workfiles', {})
+                renders = entry.get('renders', {})
                 for task_name in task_names:
+                    # Add script/workfile to comp track
                     script_path = workfiles.get(task_name)
                     if script_path:
                         comp_track = comp_tracks.get(task_name)
                         if comp_track:
                             self._add_script_track_item(sequence_name, comp_track, entry, script_path, timeline_in, timeline_in + duration - 1)
+                    
+                    # Add render to render track
+                    render_info = renders.get(task_name)
+                    if render_info and render_info.get('clip'):
+                        render_track = render_tracks.get(task_name)
+                        if render_track:
+                            self._add_render_track_item(sequence_name, render_track, entry, render_info, timeline_in, timeline_in + duration - 1)
                 
                 timeline_in += duration
                 
@@ -598,3 +703,38 @@ class LoaderThread(QtCore.QThread):
             except Exception:
                 continue
         LOGGER.info('Script path for %s: %s', shot_name, script_path)
+
+    def _add_render_track_item(self, sequence_name, render_track, entry, render_info, timeline_in, timeline_out):
+        """Add a render clip as a track item to the render track."""
+        render_clip = render_info.get('clip')
+        render_path = render_info.get('path')
+        if not render_clip:
+            LOGGER.debug('No render clip for shot %s', entry.get('shot'))
+            return
+        LOGGER.debug('Adding render track item for shot %s, path: %s', entry.get('shot'), render_path)
+        try:
+            def create_and_add_render_item():
+                render_item = render_track.createTrackItem('%s_render' % entry['shot'])
+                try:
+                    render_item.setSource(render_clip)
+                    LOGGER.debug('Set render track item source for %s', entry['shot'])
+                except Exception as exc:
+                    LOGGER.debug('Could not set render source: %s', exc)
+                render_item.setTimelineIn(timeline_in)
+                render_item.setTimelineOut(timeline_out)
+                # Add metadata
+                try:
+                    metadata = render_item.metadata()
+                    if metadata:
+                        metadata.setValue('kitsu.render_path', render_path)
+                        render_item.setMetadata(metadata)
+                except Exception as exc:
+                    LOGGER.debug('Could not set render metadata: %s', exc)
+                render_track.addItem(render_item)
+                return render_item
+            self._invoke_on_main_thread(create_and_add_render_item)
+            LOGGER.info('Added render track item for shot %s', entry['shot'])
+            self.message.emit('Linked render %s to shot %s' % (os.path.basename(render_path or 'render'), entry['shot']))
+        except Exception as exc:  # pragma: no cover - host specific
+            LOGGER.exception('Failed to add render track item for %s: %s', entry['shot'], exc)
+            self._emit_error('HIERO_ERROR', unicode(exc), shot=entry['shot'], sequence_name=sequence_name)

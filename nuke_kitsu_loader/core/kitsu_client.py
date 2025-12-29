@@ -254,6 +254,32 @@ def get_latest_workfile_for_shot(shot_id, task_name):
     return True, None
 
 
+def get_latest_render_for_shot(shot_id, task_name):
+    """Return the newest render location path for the given shot/task."""
+    ok, error = _ensure_session()
+    if not ok:
+        return False, error
+    if not task_name:
+        return True, None
+    try:
+        shot = gazu.shot.get_shot(shot_id)
+        tasks = gazu.task.all_tasks_for_shot(shot)
+    except Exception as exc:  # pragma: no cover
+        LOGGER.exception('Failed to fetch tasks for shot %s: %s', shot_id, exc)
+        return False, str(exc)
+    desired = _normalize_task_name(task_name)
+    task_candidates = [
+        task for task in tasks
+        if _normalize_task_name(_task_type_name(task)) == desired
+    ]
+    # Get latest comment with location field
+    for task in task_candidates:
+        render_path = _latest_render_from_comments(task)
+        if render_path:
+            return True, translate_repo_path_to_unc(render_path)
+    return True, None
+
+
 def translate_repo_path_to_unc(path_value):
     """Translate a repository path into a UNC path based on config mappings."""
     if not path_value:
@@ -266,8 +292,9 @@ def translate_repo_path_to_unc(path_value):
         if not match_value or not replace_value:
             continue
         if path_value.startswith(match_value):
-            return path_value.replace(match_value, replace_value, 1)
-    return path_value
+            path_value = path_value.replace(match_value, replace_value, 1)
+    # Normalize to forward slashes
+    return path_value.replace('\\', '/')
 
 
 def _latest_workfile_from_comments(task):
@@ -282,6 +309,22 @@ def _latest_workfile_from_comments(task):
         workfile = utils.extract_workfile_from_comment(text)
         if workfile:
             return workfile
+    return None
+
+
+def _latest_render_from_comments(task):
+    """Extract render location from task comments."""
+    comments = _fetch_task_comments(task)
+    if not comments:
+        return None
+    comments = sorted(comments, key=_comment_sort_key)
+    for comment in reversed(comments):
+        text = _comment_text(comment)
+        if not text:
+            continue
+        render_location = utils.extract_location_from_comment(text)
+        if render_location:
+            return render_location
     return None
 
 
