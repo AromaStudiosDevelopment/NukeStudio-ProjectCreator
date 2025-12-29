@@ -58,12 +58,32 @@ If a future environment deviates (missing `gazu`, inaccessible UNC path, etc.), 
 
 ## User guide
 
-1. **Login** – In the loader panel, enter the Kitsu API URL, username, and password, then press **Login**. The status label will update to show the authenticated user.
+### Prerequisites
+
+Before using the loader, set the following environment variables:
+- **KITSU_SERVER** - Your Kitsu API URL (e.g., `https://192.168.150.179/api`)
+- **KITSU_LOGIN** - Your Kitsu email/username
+- **KITSU_PWD** - Your Kitsu password
+
+### Usage Steps
+
+1. **Login** – In the loader panel, click **Login from Environment**. The plugin will read credentials from the environment variables above. The status label will update to show the authenticated user.
 2. **Select project** – Choose a project from the combobox. The plugin fetches all sequences for that project and displays them as selectable cards with per-sequence task dropdowns.
-3. **Choose tasks/sequences** – For each sequence card you want to process, ensure the checkbox is enabled and pick the downstream task whose workfiles (.nk) you want fetched (e.g., `Compositing`).
-4. **Run loader** – Click **Load Selected Sequences**. Progress updates and log messages appear in the lower log widget. The loader imports plates into a Footage bin, builds a new sequence with `footage` and `scripts` tracks, and attaches workfile metadata.
-5. **Open scripts** – After loading, right-click any script track item or use the Timeline menu action **Open Script Workfile** to launch the `.nk` via the configured executable.
-6. **Review logs** – Successful runs produce summary messages; any errors (missing comments, unreachable paths, etc.) are logged with codes so you can address them per shot.
+3. **Choose tasks/sequences** – For each sequence card you want to process, ensure the checkbox is enabled and pick the task whose media you want to import (e.g., `Compositing`). The loader will import both workfiles and renders from that task's comments.
+4. **Run loader** – Click **Load Selected Sequences**. Progress updates and log messages appear in the lower log widget. The loader:
+   - Imports **plates** from Conform task comments into the `Footage` bin
+   - Imports **renders** from selected task comments into the `render` bin
+   - Creates a new sequence with stacked tracks:
+     - `{task}_render` track (top) - renders from selected task
+     - `{task}` track (middle) - workfiles from selected task  
+     - `footage` track (bottom) - plates from Conform task
+5. **Comment format** – Task comments should contain both `Workfile:` and `Location:` fields:
+   ```
+   Workfile: \\192.168.150.179\share2\release\gizmo_10_v02.nk
+   Location: \\192.168.150.179\share2\footage\A002_C018_0922BW_002.mov
+   ```
+6. **Open scripts** – After loading, right-click any script track item or use the Timeline menu action **Open Script Workfile** to launch the `.nk` via the configured executable.
+7. **Review logs** – Successful runs produce summary messages; any errors (missing comments, unreachable paths, etc.) are logged with codes so you can address them per shot.
 
 ## Running tests
 
