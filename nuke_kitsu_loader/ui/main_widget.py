@@ -121,9 +121,12 @@ class KitsuLoaderMainWidget(QtWidgets.QWidget):
         if not selections:
             self._append_log('Select at least one sequence before loading')
             return
-        self._append_log('Starting loader for %d sequence(s)' % len(selections))
+        # Get current project name from combobox
+        project = self._project_combo.currentData()
+        project_name = project.get('name') if project else 'Timeline'
+        self._append_log('Starting loader for %d sequence(s) into timeline: %s' % (len(selections), project_name))
         self._load_button.setEnabled(False)
-        self._loader_thread = LoaderThread(selections, self._main_thread_executor)
+        self._loader_thread = LoaderThread(selections, project_name, self._main_thread_executor)
         self._loader_thread.message.connect(self._append_log)
         self._loader_thread.progress.connect(self._on_progress)
         self._loader_thread.completed.connect(self._on_completed)

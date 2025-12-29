@@ -79,9 +79,10 @@ class LoaderThread(QtCore.QThread):
     completed = QtCore.Signal(dict)
     errored = QtCore.Signal(dict)
 
-    def __init__(self, sequences, main_thread_executor=None, parent=None):
+    def __init__(self, sequences, project_name=None, main_thread_executor=None, parent=None):
         super(LoaderThread, self).__init__(parent)
         self._sequences = sequences or []
+        self._project_name = project_name or 'Timeline'
         self._cancel = False
         self._total_shots = 0
         self._processed_shots = 0
@@ -130,13 +131,28 @@ class LoaderThread(QtCore.QThread):
         if not plans:
             return
         self._total_shots = sum(len(plan['shots']) for plan in plans) or 1
+        
+        # Collect all shot entries from all sequences
+        all_shot_entries = []
+        all_task_names = set()
+        all_errors = []
+        
         for plan in plans:
             if self._cancel:
                 self.message.emit('Loader canceled before finishing all sequences')
                 break
-            sequence_summary = self._process_sequence_plan(plan)
+            sequence_summary = self._process_sequence_plan_for_combined_timeline(plan, all_shot_entries, all_task_names, all_errors)
             summary['sequences'].append(sequence_summary)
-            summary['errors'].extend(sequence_summary['errors'])
+        
+        summary['errors'].extend(all_errors)
+        
+        # Build one combined timeline with all sequences
+        if all_shot_entries and not self._cancel:
+            ok, payload = self._build_sequence_timeline(self._project_name, all_shot_entries, list(all_task_names))
+            if not ok:
+                all_errors.append(self._emit_error('HIERO_ERROR', unicode(payload), sequence_name=self._project_name))
+            else:
+                self.message.emit('Created timeline %s with %d clips from %d sequences' % (self._project_name, len(all_shot_entries), len(plans)))
 
     def _emit_error(self, code, message, shot=None, sequence_name=None):
         payload = {
@@ -280,16 +296,18 @@ class LoaderThread(QtCore.QThread):
         try:
             sequence_binitems = footage_bin.sequences()
             if sequence_binitems:
-                source_obj = sequence_binitems[0].activeItem()
-                LOGGER.info('Found imported Sequence: %s', sequence_binitems[0].name())
+                # Get the LAST (most recently imported) sequence, not the first
+                source_obj = sequence_binitems[-1].activeItem()
+                LOGGER.info('Found imported Sequence: %s', sequence_binitems[-1].name())
                 return source_obj
         except Exception as exc:
             LOGGER.debug('No sequences in footage_bin or error: %s', exc)
         try:
             clip_binitems = footage_bin.clips()
             if clip_binitems:
-                source_obj = clip_binitems[0].activeItem()
-                LOGGER.info('Found imported Clip: %s', clip_binitems[0].name())
+                # Get the LAST (most recently imported) clip, not the first
+                source_obj = clip_binitems[-1].activeItem()
+                LOGGER.info('Found imported Clip: %s', clip_binitems[-1].name())
                 return source_obj
         except Exception as exc:
             LOGGER.debug('No clips in footage_bin or error: %s', exc)
@@ -298,16 +316,18 @@ class LoaderThread(QtCore.QThread):
             try:
                 seqs = imported_result.sequences()
                 if seqs:
-                    source_obj = seqs[0].activeItem()
-                    LOGGER.info('Found Sequence in imported_result bin: %s', seqs[0].name())
+                    # Get the LAST sequence
+                    source_obj = seqs[-1].activeItem()
+                    LOGGER.info('Found Sequence in imported_result bin: %s', seqs[-1].name())
                     return source_obj
             except Exception as exc:
                 LOGGER.debug('No sequences in imported_result: %s', exc)
             try:
                 clips = imported_result.clips()
                 if clips:
-                    source_obj = clips[0].activeItem()
-                    LOGGER.info('Found Clip in imported_result bin: %s', clips[0].name())
+                    # Get the LAST clip
+                    source_obj = clips[-1].activeItem()
+                    LOGGER.info('Found Clip in imported_result bin: %s', clips[-1].name())
                     return source_obj
             except Exception as exc:
                 LOGGER.debug('No clips in imported_result: %s', exc)
@@ -334,6 +354,71 @@ class LoaderThread(QtCore.QThread):
                 'task_names': sequence.get('tasks', []),  # List of task names
             })
         return plans, errors
+
+    def _process_sequence_plan_for_combined_timeline(self, plan, all_shot_entries, all_task_names, all_errors):
+        """Process a sequence and add its shots to the combined timeline."""
+        sequence = plan['sequence']
+        sequence_name = sequence.get('name')
+        task_names = plan.get('task_names', [])
+        all_task_names.update(task_names)
+        shot_entries = []
+        errors = []
+        
+        # Process all shots for plates (from Conforming task)
+        for shot in plan['shots']:
+            if self._cancel:
+                break
+            shot_result = self._process_shot_plate(sequence_name, shot)
+            fatal = shot_result.get('fatal_error')
+            if fatal:
+                errors.append(fatal)
+            else:
+                entry = shot_result.get('entry')
+                if entry:
+                    shot_entries.append(entry)
+                errors.extend(shot_result.get('warnings', []))
+            self._processed_shots += 1
+            self._emit_progress()
+        
+        # For each selected task, fetch workfiles and renders for all shots
+        for task_name in task_names:
+            for entry in shot_entries:
+                if self._cancel:
+                    break
+                shot_name = entry['shot']
+                # Find the original shot dict
+                shot = next((s for s in plan['shots'] if s.get('name') == shot_name), None)
+                if not shot:
+                    continue
+                
+                # Get workfile path
+                script_path, warning = self._retrieve_script_path(shot, task_name, sequence_name)
+                if warning:
+                    errors.append(warning)
+                # Add workfile paths to entry, keyed by task name
+                if 'workfiles' not in entry:
+                    entry['workfiles'] = {}
+                entry['workfiles'][task_name] = script_path
+                
+                # Get render path and import it
+                render_result = self._retrieve_render_path(shot, task_name, sequence_name)
+                if render_result.get('error'):
+                    errors.append(render_result['error'])
+                # Add render info to entry, keyed by task name
+                if 'renders' not in entry:
+                    entry['renders'] = {}
+                entry['renders'][task_name] = render_result.get('render_info')
+        
+        # Add this sequence's shots to the combined list
+        all_shot_entries.extend(shot_entries)
+        all_errors.extend(errors)
+        
+        return {
+            'sequence': sequence_name,
+            'shots_requested': len(plan['shots']),
+            'shots_imported': len(shot_entries),
+            'errors': errors,
+        }
 
     def _process_sequence_plan(self, plan):
         sequence = plan['sequence']
