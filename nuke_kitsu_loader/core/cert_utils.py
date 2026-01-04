@@ -16,19 +16,34 @@ except ImportError:  # pragma: no cover - requests should exist but guard defens
 
 
 def _looks_like_ip_host(host):
-    """Best-effort check for IPv4/IPv6 literals."""
+    """Best-effort check for IPv4/IPv6 literals (robust across Python 2/3)."""
     if not host:
         return False
-    host = host.strip("[]")
+    host = str(host).strip("[]")
+
+    # Try IPv4
     try:
         socket.inet_aton(host)
         return True
-    except OSError:
+    except Exception:
+        # socket.error / OSError / ValueError may be raised depending on platform/Python
         pass
+
+    # Try IPv6 if platform supports inet_pton
+    if hasattr(socket, "inet_pton"):
+        try:
+            socket.inet_pton(socket.AF_INET6, host)
+            return True
+        except Exception:
+            pass
+
+    # Heuristic: lots of colons/hex chars is probably IPv6 literal
     if ":" in host:
-        allowed = "0123456789abcdefABCDEF:."
-        return all(char in allowed for char in host)
+        allowed = set("0123456789abcdefABCDEF:.")
+        return all(ch in allowed for ch in host)
+
     return False
+
 
 
 def _extract_host_from_url(url):
